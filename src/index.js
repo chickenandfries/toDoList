@@ -10,10 +10,34 @@ function Board() {
     // const addProject = () => {
     // }
 
+    const addProject = (title) => {
+        board.push(Project(title))
+    }
+
+    const getProject = (projectTitle) => {
+        const selectedProject = board.filter((project) => project.title === projectTitle);
+        return selectedProject 
+
+        
+    }
+
+    const addTask = (projectTitle) => {
+        // const pickedProject = board.filter((project) => project.title === projectTitle)
+        
+        for (const project of board) {
+            if (project.title === projectTitle) {
+                project.push(task)
+            }
+        }
+        
+        
+    }
+
     const getBoard = () => board;
 
     return {
-        getBoard,
+        getBoard, 
+        addProject,
     }
 
 }
@@ -23,7 +47,7 @@ function Board() {
 function Project(title) {
     let projects = [];
 
-    const addTask = projects.push(Task());
+    const addTaskToProject = projects.push(Task(title, description, duedate, priority, notes));
 
     return {
         title: title,
@@ -53,14 +77,23 @@ function Task(title, description, dueDate, priority, notes) {
 
 }
 
+
 function Controller() {
     let board = Board();
+    let activeProject = board.getBoard()[0];
 
     const addTask = () => {
+        const task = Task(title, description, dueDate, priority, notes);
+        
+        
+               
         
     };
 
-    let activeProject = board.getBoard[0];
+    
+
+
+    
 
     const switchProjects = (e) => {
         const selectedProjectIndex = e.target.dataset.projectIndex;
@@ -170,7 +203,17 @@ screenController() {
 
 ADDING TASK
 1. screen controller ask user for info
-2. use info to create task 
+2. use info to createTask() in Controller
+    1)task(input info here)
+    2)push task to active project 
+    3)if project already exists in board
+        replace project in board() with changed project
+      if project does not exist in board
+        push project to board 
+            give it id number... 
+    
+    4) 
+3.  
 3. push task to project 
 4. push project to board
 5. updateScreen
