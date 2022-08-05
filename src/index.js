@@ -17,27 +17,40 @@ function Board() {
     const getProject = (projectTitle) => {
         const selectedProject = board.filter((project) => project.title === projectTitle);
         return selectedProject 
-
-        
     }
 
-    const addTask = (projectTitle) => {
-        // const pickedProject = board.filter((project) => project.title === projectTitle)
-        
-        for (const project of board) {
-            if (project.title === projectTitle) {
-                project.push(task)
+    const addTask = (projectTitle, ...taskInputs) => {
+        // const projectTitle = projectTitle;
+
+        for (let i = 0; i< board.length; i++) {
+            if (board[i].title === projectTitle) {
+                board[i].tasks.push(Task(...taskInputs))
             }
         }
-        
-        
+
+        console.log(board);
+
+        return board   
     }
+
+    // const addTask = (projectTitle) => {
+    //     // const pickedProject = board.filter((project) => project.title === projectTitle)
+        
+    //     for (const project of board) {
+    //         if (project.title === projectTitle) {
+    //             project.push(task)
+    //         }
+    //     }
+        
+        
+    // }
 
     const getBoard = () => board;
 
     return {
         getBoard, 
         addProject,
+        addTask
     }
 
 }
@@ -45,13 +58,14 @@ function Board() {
 
 
 function Project(title) {
-    let projects = [];
+    let tasks = [];
 
-    const addTaskToProject = projects.push(Task(title, description, duedate, priority, notes));
+    // const addTaskToProject = projects.push(Task(title, description, duedate, priority, notes));
 
     return {
         title: title,
-        addTask, 
+        tasks
+ 
     }
 }
 
@@ -80,29 +94,25 @@ function Task(title, description, dueDate, priority, notes) {
 
 function Controller() {
     let board = Board();
-    let activeProject = board.getBoard()[0];
+    let activeProjectTitle = board.getBoard()[0].title;
+    console.log(activeProjectTitle);
+    
+    
+    const switchProjects = (e) => {
+        activeProjectTitle = e.target.dataset.title;
 
-    const addTask = () => {
-        const task = Task(title, description, dueDate, priority, notes);
-        
-        
-               
+    }
+
+    const addTask = (title, description, dueDate, priority, notes) => {
+     
+        board.addTask(activeProjectTitle, title, description, dueDate, priority, notes)
         
     };
 
-    
 
-
-    
-
-    const switchProjects = (e) => {
-        const selectedProjectIndex = e.target.dataset.projectIndex;
-
-        let activeProject = board.getBoard[selectedProjectIndex];        
+    return {
+        addTask
     }
-
-
-    
      
 }
 
@@ -114,10 +124,15 @@ console.log(board.getBoard());
 
 
 function screenController() {
-    
-    
 
 }
+
+
+console.log('------------------');
+const testing = Controller();
+
+testing.addTask('inbox', 1,2,3,4,5);
+
 
 /*
 
