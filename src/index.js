@@ -1,5 +1,9 @@
 'use strict'
 
+import './style.css';
+
+
+
 ////state of the board.... 
 function Board() {
 
@@ -104,7 +108,6 @@ function Controller() {
     }
 
     const addTask = (title, description, dueDate, priority, notes) => {
-     
         board.addTask(activeProjectTitle, title, description, dueDate, priority, notes)
         
     };
@@ -116,6 +119,7 @@ function Controller() {
      
 }
 
+
 const butt = Task('a', 'b', 'd', 1, 'asdf')
 console.log(butt);
 
@@ -124,14 +128,47 @@ console.log(board.getBoard());
 
 
 function screenController() {
+    ////select body 
+    const body = document.querySelector('body');
+
+    ////create header
+    const header = document.createElement('header');
+    body.appendChild(header);
+
+    const headerTitle = document.createElement('div');
+    header.appendChild(headerTitle);
+
+    const headerTitleHOne = document.createElement('h1');
+    headerTitleHOne.textContent = 'ToDoList'
+    headerTitle.appendChild(headerTitleHOne);
+
+
+    ////create taskbar
+    const taskBar = document.querySelector('div');
+    taskBar.classList.add('taskBar');
+    body.appendChild(taskBar);
+
+    const taskBarTop = document.querySelector('div');
+    taskBarTop.classList.add('taskBarTop');
+    taskBar.appendChild(taskBarTop);
+
+    
+
+
+    
+
 
 }
 
 
 console.log('------------------');
 const testing = Controller();
+testing.addTask(1,2,3,4,5)
 
-testing.addTask('inbox', 1,2,3,4,5);
+
+screenController();
+
+
 
 
 /*
