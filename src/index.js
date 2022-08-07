@@ -1,6 +1,11 @@
 'use strict'
 
 import './style.css';
+import inboxImg from './img/inbox.png';
+import todayImg from './img/today.png';
+import upComingImg from './img/upComing.png';
+import addProjectImg from './img/addProject.png';
+
 
 
 
@@ -112,58 +117,160 @@ function Controller() {
         
     };
 
+    const getBoard = board.getBoard();
+
 
     return {
-        addTask
+        addTask,
+        getBoard
     }
      
 }
 
 
-const butt = Task('a', 'b', 'd', 1, 'asdf')
-console.log(butt);
+// const butt = Task('a', 'b', 'd', 1, 'asdf')
+// console.log(butt);
 
-const board = Board();
-console.log(board.getBoard());
+// const board = Board();
+// console.log(board.getBoard());
 
 
 function screenController() {
-    ////select body 
-    const body = document.querySelector('body');
 
-    ////create header
-    const header = document.createElement('header');
-    body.appendChild(header);
-
-    const headerTitle = document.createElement('div');
-    header.appendChild(headerTitle);
-
-    const headerTitleHOne = document.createElement('h1');
-    headerTitleHOne.textContent = 'ToDoList'
-    headerTitle.appendChild(headerTitleHOne);
+    const testing = Controller();
+    testing.addTask(1,2,3,4,5)
 
 
-    ////create taskbar
-    const taskBar = document.querySelector('div');
-    taskBar.classList.add('taskBar');
-    body.appendChild(taskBar);
+    const updateScreen = () => {
+        ////CLEAR////
 
-    const taskBarTop = document.querySelector('div');
-    taskBarTop.classList.add('taskBarTop');
-    taskBar.appendChild(taskBarTop);
+        ////GET STUFF FROM BOARD////
+        const board = testing.getBoard();
 
+
+        ////select body 
+        const body = document.querySelector('body');
     
-
-
+        ////create header
+        const header = document.createElement('header');
+        body.appendChild(header);
     
+        const headerTitle = document.createElement('h1');
+        headerTitle.textContent = 'ToDoList'
+        header.appendChild(headerTitle);
+    
+        // const headerTitleHOne = document.createElement('h1');
+        // headerTitleHOne.textContent = 'ToDoList'
+        // headerTitle.appendChild(headerTitleHOne);
+    
+    
+        ////create taskbar 
+        const taskBar = document.createElement('div');
+        taskBar.classList.add('taskBar');
+        body.appendChild(taskBar);
+    
+    
+        ////taskBarTop
+        const taskBarTop = document.createElement('nav');
+        taskBarTop.classList.add('taskBarTop');
+        taskBar.appendChild(taskBarTop);
+    
+        const inbox = document.createElement('div');
+        inbox.classList.add('taskBarTopContents');
+        taskBarTop.appendChild(inbox);
+    
+        const inboxImgPNG = new Image();
+        inboxImgPNG.src = inboxImg;
+        inbox.appendChild(inboxImgPNG);
+    
+        const inboxHThree = document.createElement('h3');
+        inboxHThree.textContent = 'Inbox'
+        inbox.appendChild(inboxHThree);
+    
+    
+        const today = document.createElement('div');
+        today.classList.add('taskBarTopContents');
+        taskBarTop.appendChild(today);
+    
+        const todayImgPNG = new Image();
+        todayImgPNG.src = todayImg;
+        todayImgPNG.classList.add('todayImgPNG')
+        today.appendChild(todayImgPNG);
+    
+    
+        const todayHThree = document.createElement('h3');
+        todayHThree.textContent = 'Today'
+        today.appendChild(todayHThree);
+    
+    
+        const upComing = document.createElement('div');
+        upComing.classList.add('taskBarTopContents');
+        taskBarTop.appendChild(upComing);
+    
+    
+        const upComingImgPNG = new Image();
+        upComingImgPNG.src = upComingImg;
+        upComingImgPNG.classList.add('upComingImgPNG');
+        upComing.appendChild(upComingImgPNG);
+    
+    
+        const upComingHThree = document.createElement('h3');
+        upComingHThree.textContent = 'Upcoming'
+        upComing.appendChild(upComingHThree);
+    
+    
+        ////create Projects
+        const projects = document.createElement('div');
+        projects.classList.add('projects');
+        taskBar.appendChild(projects);
+    
+        const projectsHTwo = document.createElement('h2');
+        // projectsHTwo.classList.add('projectsContent')
+        projectsHTwo.textContent = "Projects"
+        projects.appendChild(projectsHTwo);
+    
+        const projectsNav = document.createElement('nav');
+     
+        projects.appendChild(projectsNav);
+    
+        const addProject = document.createElement('div');
+        addProject.classList.add('projectsContent');
+        projectsNav.appendChild(addProject);
+    
+        const addProjectImgPNG = new Image();
+        addProjectImgPNG.src = addProjectImg;
+        addProject.appendChild(addProjectImgPNG);
+    
+        const addProjectHThree = document.createElement('h3');
+        addProjectHThree.textContent = 'Add Project';
+        addProject.appendChild(addProjectHThree)
+    
+    
+        ////create footer
+        const footer = document.createElement('footer');
+        body.appendChild(footer);
+    
+        const footerHThree = document.createElement('h3');
+        footerHThree.textContent = 'this is a footer';
+        footer.appendChild(footerHThree);
+    
+    
+        ////create taskView
+        const taskView = document.createElement('div');
+        taskView.classList.add('taskView');
+        body.appendChild(taskView);
+    }
+
+    //initial render 
+    updateScreen();
+
+
 
 
 }
 
 
 console.log('------------------');
-const testing = Controller();
-testing.addTask(1,2,3,4,5)
 
 
 screenController();
