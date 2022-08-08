@@ -5,6 +5,8 @@ import inboxImg from './img/inbox.png';
 import todayImg from './img/today.png';
 import upComingImg from './img/upComing.png';
 import addProjectImg from './img/addProject.png';
+import checkMarkImg from './img/checkMark.png';
+
 
 
 
@@ -15,6 +17,7 @@ function Board() {
     ////initial set up 
     let board = [];
     board.push(Project('inbox'));
+ 
 
     // const addProject = () => {
     // }
@@ -24,8 +27,8 @@ function Board() {
     }
 
     const getProject = (projectTitle) => {
-        const selectedProject = board.filter((project) => project.title === projectTitle);
-        return selectedProject 
+        const activeProject = board.filter((project) => project.title === projectTitle);
+        return activeProject 
     }
 
     const addTask = (projectTitle, ...taskInputs) => {
@@ -74,12 +77,11 @@ function Project(title) {
     return {
         title: title,
         tasks
- 
     }
 }
 
 
-function Task(title, description, dueDate, priority, notes) {
+function Task(description, dueDate, priority, notes) {
 
     // priority = [
     //     1,
@@ -88,7 +90,6 @@ function Task(title, description, dueDate, priority, notes) {
     // ]
 
     return {
-        title: title,
         description: description,
         dueDate: dueDate,
         priority: priority,
@@ -101,28 +102,44 @@ function Task(title, description, dueDate, priority, notes) {
 }
 
 
-function Controller() {
-    let board = Board();
-    let activeProjectTitle = board.getBoard()[0].title;
-    console.log(activeProjectTitle);
-    
-    
-    const switchProjects = (e) => {
-        activeProjectTitle = e.target.dataset.title;
 
+function Controller() {
+    ////initial set up
+    let board = Board();
+    let activeProject = board.getBoard()[0];
+    console.log(activeProject);
+        
+
+    const getActiveProjectTitle = () => activeProject.title; 
+
+    const getActiveProjectTasks = () => activeProject.tasks;
+    console.log(getActiveProjectTasks());
+
+
+    const switchProjects = (e) => {
+        let board = board.getBoard();
+        for (let i=0; i < board.length; i++) {
+            if (board[i].title === e.target.dataset.title) {
+                activeProject = board[i];
+            }
+        }
     }
 
-    const addTask = (title, description, dueDate, priority, notes) => {
-        board.addTask(activeProjectTitle, title, description, dueDate, priority, notes)
+    const addTask = (description, dueDate, priority, notes) => {
+        board.addTask(getActiveProjectTitle(), description, dueDate, priority, notes)
         
     };
 
-    const getBoard = board.getBoard();
+
+    const getBoard = () => board.getBoard();
 
 
     return {
         addTask,
-        getBoard
+        getBoard,
+        getActiveProjectTitle,
+        getActiveProjectTasks,
+        switchProjects
     }
      
 }
@@ -137,16 +154,23 @@ function Controller() {
 
 function screenController() {
 
-    const testing = Controller();
-    testing.addTask(1,2,3,4,5)
+    const toDoList = Controller();
+    toDoList.addTask('asfed','06/05/25',3,4,5);
+    toDoList.addTask('a','b','c','d','e');
+
+    const board = toDoList.getBoard();
+    console.log(board);
+    
+    const activeProjectTitle = toDoList.getActiveProjectTitle();
 
 
     const updateScreen = () => {
         ////CLEAR////
 
         ////GET STUFF FROM BOARD////
-        const board = testing.getBoard();
-
+        const board = toDoList.getBoard();
+        console.log(board);
+        
 
         ////select body 
         const body = document.querySelector('body');
@@ -243,9 +267,72 @@ function screenController() {
     
         const addProjectHThree = document.createElement('h3');
         addProjectHThree.textContent = 'Add Project';
-        addProject.appendChild(addProjectHThree)
-    
-    
+        addProject.appendChild(addProjectHThree);
+
+
+        ////create TASKVIEW////
+        const taskView = document.createElement('div');
+        taskView.classList.add('taskView');
+        body.appendChild(taskView);
+
+        ////showing which project is active
+        const activeProject = document.createElement('h2');
+        activeProject.classList.add('activeProject')
+        activeProject.textContent = activeProjectTitle;
+        taskView.appendChild(activeProject);
+
+        ////tasks 
+        const tasks = document.createElement('nav'); 
+        tasks.classList.add('tasks');
+        taskView.appendChild(tasks);
+
+        ////create tasks list 
+        toDoList.getActiveProjectTasks().forEach((activeTask) => {
+
+            ////create task 
+            const task = document.createElement('div');
+            task.classList.add('task');
+            tasks.appendChild(task);
+
+            const checkMarkImgPNG = new Image();
+            checkMarkImgPNG.src = checkMarkImg;
+            task.appendChild(checkMarkImgPNG);
+
+
+            ////task info 
+            const description = document.createElement('div');
+            description.classList.add('description');
+            description.textContent = activeTask.description;
+            task.appendChild(description);
+
+            const dueDate = document.createElement('div');
+            dueDate.classList.add('dueDate');
+            dueDate.textContent = activeTask.dueDate;
+            task.appendChild(dueDate);
+            
+            // const priority = document.createElement('div');
+            // priority.classList.add('priority');
+            // priority.textContent = activeTask.priority; 
+            // task.appendChild(priority);
+
+            // const notes = document.createElement('div');
+            // notes.classList.add('notes');
+            // notes.textContent = activeTask.notes;
+            // task.appendChild(notes);
+
+
+
+        })
+
+       
+        ////create addTask div
+
+        const addTask = document.createElement('div');
+        addTask.classList.add('addTask');
+        addTask.textContent = '+ Add Task';
+        tasks.appendChild(addTask);
+
+
         ////create footer
         const footer = document.createElement('footer');
         body.appendChild(footer);
@@ -253,16 +340,26 @@ function screenController() {
         const footerHThree = document.createElement('h3');
         footerHThree.textContent = 'this is a footer';
         footer.appendChild(footerHThree);
+
+
     
     
-        ////create taskView
-        const taskView = document.createElement('div');
-        taskView.classList.add('taskView');
-        body.appendChild(taskView);
+    
     }
 
     //initial render 
     updateScreen();
+
+    // const switchTaskView(e) {
+
+    //     ////get taskBarTopContents
+    //     const taskViewContents = document.querySelectorAll('.taskViewContents');
+
+    //     const selectedTaskViewContents = document.getElementById(`${e.target.dataset.}`)
+
+
+
+    // }
 
 
 

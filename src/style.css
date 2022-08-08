@@ -8,7 +8,7 @@ body {
 
 }
 
-h3 {
+h2, h3 {
     padding: 0;
     margin: 0;
     
@@ -96,8 +96,24 @@ header h1 {
     grid-row-start: 2;
     grid-row-end: 3;
     background-color: #f2f0f0;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding-top: 1rem;
+    padding-left: 2rem;
 }
 
+.tasks {
+    display: flex;
+    flex-direction: column;
+    border: 2px solid black;
+
+}
+
+.task {
+    display: flex;
+    border: solid red;
+}
 
 
 footer {
