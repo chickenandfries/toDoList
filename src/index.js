@@ -3,7 +3,7 @@
 import './style.css';
 import inboxImg from './img/inbox.png';
 import todayImg from './img/today.png';
-import upComingImg from './img/upComing.png';
+import upcomingImg from './img/upcoming.png';
 import addProjectImg from './img/addProject.png';
 import checkMarkImg from './img/checkMark.png';
 
@@ -16,7 +16,10 @@ function Board() {
 
     ////initial set up 
     let board = [];
-    board.push(Project('inbox'));
+    board.push(Project('inbox', 0));
+    board.push(Project('today', 1));
+    board.push(Project('upcoming', 2));
+
  
 
     // const addProject = () => {
@@ -40,7 +43,7 @@ function Board() {
             }
         }
 
-        console.log(board);
+
 
         return board   
     }
@@ -69,13 +72,14 @@ function Board() {
 
 
 
-function Project(title) {
+function Project(title, projectID) {
     let tasks = [];
 
     // const addTaskToProject = projects.push(Task(title, description, duedate, priority, notes));
 
     return {
         title: title,
+        projectID: projectID,
         tasks
     }
 }
@@ -116,13 +120,20 @@ function Controller() {
     console.log(getActiveProjectTasks());
 
 
-    const switchProjects = (e) => {
-        let board = board.getBoard();
-        for (let i=0; i < board.length; i++) {
-            if (board[i].title === e.target.dataset.title) {
-                activeProject = board[i];
+    const switchProjects = (selectedProjectTitle) => {
+        const boardBoard = board.getBoard();
+  
+        
+        for (let i=0; i < boardBoard.length; i++) {
+            if (boardBoard[i].title === selectedProjectTitle) {
+       
+                activeProject = boardBoard[i];
             }
         }
+        console.log(activeProject);
+        console.log(getActiveProjectTasks());
+        
+        
     }
 
     const addTask = (description, dueDate, priority, notes) => {
@@ -158,22 +169,25 @@ function screenController() {
     toDoList.addTask('asfed','06/05/25',3,4,5);
     toDoList.addTask('a','b','c','d','e');
 
-    const board = toDoList.getBoard();
-    console.log(board);
-    
-    const activeProjectTitle = toDoList.getActiveProjectTitle();
+    ////selecting
+    const body = document.querySelector('body')  
 
+    // const board = toDoList.getBoard();
+    // console.log(board);
+    
 
     const updateScreen = () => {
         ////CLEAR////
+        body.innerHTML ="";
 
         ////GET STUFF FROM BOARD////
         const board = toDoList.getBoard();
-        console.log(board);
-        
+        console.log(board);    
 
-        ////select body 
-        const body = document.querySelector('body');
+        let activeProjectTitle = toDoList.getActiveProjectTitle();
+        console.log(`this is activeProjectTitle: ${activeProjectTitle}`);
+        
+   
     
         ////create header
         const header = document.createElement('header');
@@ -200,20 +214,25 @@ function screenController() {
         taskBar.appendChild(taskBarTop);
     
         const inbox = document.createElement('div');
-        inbox.classList.add('taskBarTopContents');
+        inbox.classList.add('taskBarContents');
+        inbox.dataset.projectTitle = 'inbox';
+    
         taskBarTop.appendChild(inbox);
     
         const inboxImgPNG = new Image();
         inboxImgPNG.src = inboxImg;
+        inboxImgPNG.dataset.projectTitle = 'inbox';
         inbox.appendChild(inboxImgPNG);
     
         const inboxHThree = document.createElement('h3');
         inboxHThree.textContent = 'Inbox'
+        inboxHThree.dataset.projectTitle = 'inbox';
         inbox.appendChild(inboxHThree);
     
     
         const today = document.createElement('div');
-        today.classList.add('taskBarTopContents');
+        today.classList.add('taskBarContents');
+        today.dataset.projectTitle = 'today';
         taskBarTop.appendChild(today);
     
         const todayImgPNG = new Image();
@@ -227,20 +246,21 @@ function screenController() {
         today.appendChild(todayHThree);
     
     
-        const upComing = document.createElement('div');
-        upComing.classList.add('taskBarTopContents');
-        taskBarTop.appendChild(upComing);
+        const upcoming = document.createElement('div');
+        upcoming.classList.add('taskBarContents');
+        upcoming.dataset.projectTitle = 'upcoming';
+        taskBarTop.appendChild(upcoming);
     
     
-        const upComingImgPNG = new Image();
-        upComingImgPNG.src = upComingImg;
-        upComingImgPNG.classList.add('upComingImgPNG');
-        upComing.appendChild(upComingImgPNG);
+        const upcomingImgPNG = new Image();
+        upcomingImgPNG.src = upcomingImg;
+        upcomingImgPNG.classList.add('upcomingImgPNG');
+        upcoming.appendChild(upcomingImgPNG);
     
     
-        const upComingHThree = document.createElement('h3');
-        upComingHThree.textContent = 'Upcoming'
-        upComing.appendChild(upComingHThree);
+        const upcomingHThree = document.createElement('h3');
+        upcomingHThree.textContent = 'Upcoming'
+        upcoming.appendChild(upcomingHThree);
     
     
         ////create Projects
@@ -254,8 +274,20 @@ function screenController() {
         projects.appendChild(projectsHTwo);
     
         const projectsNav = document.createElement('nav');
-     
         projects.appendChild(projectsNav);
+
+        ////create DOM elements for projects 
+        for (let i=3; i < board.length; i++) {
+            console.log(board.length);
+            const projectsNavProject = document.createElement('div');
+            projectsNavProject.classList.add('taskBarContents');
+            ////user input title needed here.... 
+            projectsNavProject.dataset.title = `title`
+            ////projectTargetID is what will be used to switch between taskView 
+            projectsNavProject.dataset.projectTargetID = `${i}`;
+            projectsNav.appendChild(projectsNavProject);
+        }
+        
     
         const addProject = document.createElement('div');
         addProject.classList.add('projectsContent');
@@ -277,14 +309,20 @@ function screenController() {
 
         ////showing which project is active
         const activeProject = document.createElement('h2');
-        activeProject.classList.add('activeProject')
+        activeProject.classList.add('activeProject');
+        console.log(`this is activeProjectTitle: ${activeProjectTitle}`);
+        
         activeProject.textContent = activeProjectTitle;
         taskView.appendChild(activeProject);
+
 
         ////tasks 
         const tasks = document.createElement('nav'); 
         tasks.classList.add('tasks');
         taskView.appendChild(tasks);
+
+        console.log(toDoList.getActiveProjectTitle());
+        
 
         ////create tasks list 
         toDoList.getActiveProjectTasks().forEach((activeTask) => {
@@ -341,25 +379,55 @@ function screenController() {
         footerHThree.textContent = 'this is a footer';
         footer.appendChild(footerHThree);
 
+        ////adding switchProject function to each line item 
+        const taskBarContents = document.querySelectorAll('.taskBarContents');
+        taskBarContents.forEach((taskBarContent) => {
+            taskBarContent.addEventListener('click', switchProjectClick)
+        })
+        console.log('switchProjectClick event has been added')
+
 
     
     
-    
+        
     }
+
+    function switchProjectClick(e) {
+        console.log('running switchProjectClick');
+
+        const selectedProjectTitle = e.target.dataset.projectTitle;
+        console.log(`${selectedProjectTitle} has run`);
+        console.log(typeof selectedProjectTitle);
+
+        ////if what was clicked on doesn't have projectTitle, return 
+        if (!selectedProjectTitle) return;
+        console.log(`did not return `);
+
+        toDoList.switchProjects(selectedProjectTitle);
+
+        updateScreen();
+
+    }
+
+    function addProjectClick(e) {
+        /*
+        1. pop up 
+        2. user input
+        3. 
+
+        */
+        
+    }
+
+
+    
+
 
     //initial render 
     updateScreen();
 
-    // const switchTaskView(e) {
+    console.log('updateScreen has run');
 
-    //     ////get taskBarTopContents
-    //     const taskViewContents = document.querySelectorAll('.taskViewContents');
-
-    //     const selectedTaskViewContents = document.getElementById(`${e.target.dataset.}`)
-
-
-
-    // }
 
 
 

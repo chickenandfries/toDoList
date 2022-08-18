@@ -54,7 +54,7 @@ header h1 {
 
 
 
-.taskBarTopContents {
+.taskBarContents {
     display: flex;
     border: 2px solid black;
     padding: 0.3rem;
