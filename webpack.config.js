@@ -10,6 +10,11 @@ module.exports = {
     //     })
     // ],
     devtool: 'inline-source-map',
+    resolve: {
+        fallback: {
+          util: require.resolve("util/")
+        }
+    },
     output: {
         filename: 'main.js',
         path: path.resolve(__dirname, 'dist'),

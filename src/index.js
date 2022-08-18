@@ -6,6 +6,7 @@ import todayImg from './img/today.png';
 import upcomingImg from './img/upcoming.png';
 import addProjectImg from './img/addProject.png';
 import checkMarkImg from './img/checkMark.png';
+import { LibraryTemplatePlugin } from 'webpack';
 
 
 
@@ -379,12 +380,35 @@ function screenController() {
         footerHThree.textContent = 'this is a footer';
         footer.appendChild(footerHThree);
 
+
+        // ////create userForm - addproject
+        // const addProjectForm = document.createElement('div');
+        // userFormProject.id = 'userFormProject';
+        // body.appendChild(userFormProject);
+
+        // const addProjectFormUser = document.createElement('form');
+        // addProjectFormUser.classList.add('addProjectFormUser');
+        // addProjectForm.appendChild(addProjectFormUser);
+        
+        // const addProjectFormUserHTwo = document.createElement('h2');
+        // addProjectFormUserHTwo.textContent = 'Add Project';
+        // addProjectFormUser.appendChild(addProjectFormUserHTwo);
+
+        // const addProjectFormUserTitle = document.createElement('label');
+     
+
+
+
+
         ////adding switchProject function to each line item 
         const taskBarContents = document.querySelectorAll('.taskBarContents');
         taskBarContents.forEach((taskBarContent) => {
             taskBarContent.addEventListener('click', switchProjectClick)
         })
         console.log('switchProjectClick event has been added')
+
+
+
 
 
     
@@ -412,6 +436,7 @@ function screenController() {
     function addProjectClick(e) {
         /*
         1. pop up 
+            - taskview area 
         2. user input
         3. 
 
@@ -439,6 +464,9 @@ console.log('------------------');
 
 
 screenController();
+
+console.log(`butt`);
+
 
 
 
