@@ -5,16 +5,24 @@ body {
     grid-template-columns: 250px 1fr;
     grid-template-rows: 120px 1fr 50px;
     height: 100vh;
+    position:relative;
 
 }
 
 h2, h3 {
     padding: 0;
     margin: 0;
-    
-
 }
 
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    padding: 0;
+    margin: 0;
+}
 
 header {
     /* height: 120px; */
@@ -115,6 +123,62 @@ header h1 {
     border: solid red;
 }
 
+#addProjectForm {
+    display: none;
+    height:300px;
+    width:300px;
+    position:absolute;
+    top: 20%;
+    left: 50%;
+    margin-left: -150px;
+    background-color: #c9c8c7;
+
+}
+
+.addProjectFormUser {
+    display: flex;
+    flex-direction: column;
+
+
+
+}
+
+.addProjectFormUserHeading h2 {
+
+
+}
+
+
+.addProjectFormUserHeading {
+    background-color:#696868;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 3rem;
+    
+}
+
+.addProjectFormUserBody {
+    display: flex;
+    flex-direction: column;
+}
+
+.addProjectFormUserLiTitle {
+    display: flex;
+    flex-direction: column;
+
+}
+
+.addProjectFormUserButtons {
+    margin-top: 100px;
+    align-self: flex-end;
+}
+
+
+
+/* .addProjectFormUserHeadingHTwo {
+    text-align: center;
+} */
 
 footer {
     background-color: red;

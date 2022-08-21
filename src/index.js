@@ -6,8 +6,6 @@ import todayImg from './img/today.png';
 import upcomingImg from './img/upcoming.png';
 import addProjectImg from './img/addProject.png';
 import checkMarkImg from './img/checkMark.png';
-import { LibraryTemplatePlugin } from 'webpack';
-
 
 
 
@@ -73,14 +71,14 @@ function Board() {
 
 
 
-function Project(title, projectID) {
+function Project(title) {
     let tasks = [];
 
     // const addTaskToProject = projects.push(Task(title, description, duedate, priority, notes));
 
     return {
         title: title,
-        projectID: projectID,
+        // projectID: projectID,
         tasks
     }
 }
@@ -142,6 +140,10 @@ function Controller() {
         
     };
 
+    const addProject = (projectTitle) => {
+        board.addProject(projectTitle)
+    }
+
 
     const getBoard = () => board.getBoard();
 
@@ -183,7 +185,8 @@ function screenController() {
 
         ////GET STUFF FROM BOARD////
         const board = toDoList.getBoard();
-        console.log(board);    
+        console.log(board);
+           
 
         let activeProjectTitle = toDoList.getActiveProjectTitle();
         console.log(`this is activeProjectTitle: ${activeProjectTitle}`);
@@ -302,6 +305,9 @@ function screenController() {
         addProjectHThree.textContent = 'Add Project';
         addProject.appendChild(addProjectHThree);
 
+        addProject.addEventListener('click', openProjectForm);
+        
+
 
         ////create TASKVIEW////
         const taskView = document.createElement('div');
@@ -381,21 +387,63 @@ function screenController() {
         footer.appendChild(footerHThree);
 
 
-        // ////create userForm - addproject
-        // const addProjectForm = document.createElement('div');
-        // userFormProject.id = 'userFormProject';
-        // body.appendChild(userFormProject);
+        ////create userForm - addproject
+        const addProjectForm = document.createElement('div');
+        addProjectForm.id = 'addProjectForm';
+        body.appendChild(addProjectForm);
 
-        // const addProjectFormUser = document.createElement('form');
-        // addProjectFormUser.classList.add('addProjectFormUser');
-        // addProjectForm.appendChild(addProjectFormUser);
+        const addProjectFormUser = document.createElement('form');
+        addProjectFormUser.classList.add('addProjectFormUser');
+        // addProjectFormUser.style.height = '100%';
+        addProjectForm.appendChild(addProjectFormUser);
+
+        const addProjectFormUserHeading = document.createElement('div');
+        addProjectFormUserHeading.classList.add('addProjectFormUserHeading');
+        addProjectFormUser.appendChild(addProjectFormUserHeading);
         
-        // const addProjectFormUserHTwo = document.createElement('h2');
-        // addProjectFormUserHTwo.textContent = 'Add Project';
-        // addProjectFormUser.appendChild(addProjectFormUserHTwo);
+        const addProjectFormUserHeadingHTwo = document.createElement('h2');
+        addProjectFormUserHeadingHTwo.textContent = 'Add Project';
+        addProjectFormUserHeading.appendChild(addProjectFormUserHeadingHTwo);
 
-        // const addProjectFormUserTitle = document.createElement('label');
-     
+        const addProjectFormUserBody = document.createElement('div');
+        addProjectFormUserBody.classList.add('addProjectFormUserBody');
+        addProjectFormUser.appendChild(addProjectFormUserBody);
+
+        const addProjectFormUserUl = document.createElement('ul');
+        addProjectFormUserUl.classList.add('addProjectFormUserUl');
+        addProjectFormUserBody.appendChild(addProjectFormUserUl);
+
+        const addProjectFormUserLiTitle = document.createElement('li');
+        addProjectFormUserLiTitle.classList.add('addProjectFormUserLiTitle')
+        addProjectFormUserUl.appendChild(addProjectFormUserLiTitle);
+
+        const addProjectFormUserTitleLabel = document.createElement('label');
+        addProjectFormUserTitleLabel.setAttribute('for', 'projectTitle');
+        addProjectFormUserTitleLabel.textContent = 'Project Title ';
+        addProjectFormUserLiTitle.appendChild(addProjectFormUserTitleLabel);
+                
+        const addProjectFormUserTitleInput = document.createElement('input');
+        addProjectFormUserTitleInput.classList.add('addProjectFormTitleInput');
+        addProjectFormUserTitleInput.setAttribute('type', 'text');  
+        addProjectFormUserTitleInput.setAttribute('name', 'projectTitle');
+   
+        addProjectFormUserLiTitle.appendChild(addProjectFormUserTitleInput);
+
+
+        const addProjectFormUserButtons = document.createElement('div');
+        addProjectFormUserButtons.classList.add('addProjectFormUserButtons');
+        addProjectForm.appendChild(addProjectFormUserButtons);
+
+        const addProjectFormUserCancel = document.createElement('button');
+        addProjectFormUserCancel.textContent = 'Cancel';
+        addProjectFormUserButtons.appendChild(addProjectFormUserCancel);
+        addProjectFormUserCancel.addEventListener('click', cancelProjectForm);
+        
+        
+        const addProjectFormUserAdd = document.createElement('button');
+        addProjectFormUserAdd.textContent = 'Add';
+        addProjectFormUserButtons.appendChild(addProjectFormUserAdd);
+        addProjectFormUserAdd.addEventListener('click', projectFormSubmit);
 
 
 
@@ -407,9 +455,7 @@ function screenController() {
         })
         console.log('switchProjectClick event has been added')
 
-
-
-
+    
 
     
     
@@ -433,16 +479,40 @@ function screenController() {
 
     }
 
-    function addProjectClick(e) {
-        /*
-        1. pop up 
-            - taskview area 
-        2. user input
-        3. 
 
-        */
+
+
+
+    function openProjectForm() {
+        const addProjectForm = document.querySelector('#addProjectForm');
+        addProjectForm.style.display = 'block';
+    }
+
+
+
+    function cancelProjectForm() {
+        
+        ////clearing any input made 
+        const addProjectFormUserTitleInput = document.querySelector('.addProjectFormTitleInput')
+        addProjectFormUserTitleInput.value='';
+
+        const addProjectForm = document.querySelector('#addProjectForm');
+        addProjectForm.style.display = 'none';
+    }
+
+
+    function projectFormSubmit() {
+        const addProjectFormUserTitleInput = document.querySelector('.addProjectFormTitleInput');
+        const projectTitle = addProjectFormUserTitleInput.value;
+
+        toDoList.addProject(projectTitle);
+        updateScreen();
+
         
     }
+
+
+
 
 
     
@@ -465,7 +535,7 @@ console.log('------------------');
 
 screenController();
 
-console.log(`butt`);
+console.log(`checking`);
 
 
 
