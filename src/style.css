@@ -119,9 +119,47 @@ header h1 {
 }
 
 .task {
-    display: flex;
+    display: grid;
+    grid-template-columns: 50px 3fr 1fr;
+    grid-template-rows: 50px 1fr;
     border: solid red;
 }
+
+.checkMarkImgPNG {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 1;
+    grid-row-end: 2;
+}
+
+.taskTitle {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 2;
+
+}
+
+.taskDueDate {
+    grid-column-start: 3;
+    grid-column-end: 4;
+    grid-row-start: 1;
+    grid-row-end: 2;
+
+}
+
+.taskDescription {
+    grid-column-start: 1;
+    grid-column-end: 4;
+    grid-row-start: 2;
+    grid-row-end: 3;
+}
+
+
+
+
+
+
 
 #addProjectForm {
     display: none;
@@ -138,8 +176,6 @@ header h1 {
 .addProjectFormUser {
     display: flex;
     flex-direction: column;
-
-
 
 }
 
@@ -174,7 +210,48 @@ header h1 {
     align-self: flex-end;
 }
 
+#addTaskForm {
+    display: none;
+    height:500px;
+    width:500px;
+    position:absolute;
+    top: 20%;
+    left: 50%;
+    margin-left: -250px;
+    background-color: #c9c8c7;
 
+}
+
+.addTaskFormUser {
+    display: flex;
+    flex-direction: column;
+
+}
+
+.addTaskFormUserHeading {
+    background-color:#696868;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 3rem;
+    
+}
+
+.addTaskFormUserBody {
+    display: flex;
+    flex-direction: column;
+}
+
+.addTaskFormUserLiTitle {
+    display: flex;
+    flex-direction: column;
+
+}
+
+.addTaskFormUserButtons {
+    margin-top: 100px;
+    align-self: flex-end;
+}
 
 /* .addProjectFormUserHeadingHTwo {
     text-align: center;

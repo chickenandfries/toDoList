@@ -74,7 +74,7 @@ function Board() {
 function Project(title) {
     let tasks = [];
 
-    // const addTaskToProject = projects.push(Task(title, description, duedate, priority, notes));
+    // const addTaskToProject = projects.push(Task(title, description, duedate, priority, description));
 
     return {
         title: title,
@@ -84,7 +84,7 @@ function Project(title) {
 }
 
 
-function Task(description, dueDate, priority, notes) {
+function Task(title, dueDate, priority, description) {
 
     // priority = [
     //     1,
@@ -93,10 +93,10 @@ function Task(description, dueDate, priority, notes) {
     // ]
 
     return {
-        description: description,
+        title: title,
         dueDate: dueDate,
         priority: priority,
-        notes: notes,
+        description: description,
 
     }
 
@@ -135,8 +135,8 @@ function Controller() {
         
     }
 
-    const addTask = (description, dueDate, priority, notes) => {
-        board.addTask(getActiveProjectTitle(), description, dueDate, priority, notes)
+    const addTask = (title, dueDate, priority, description) => {
+        board.addTask(getActiveProjectTitle(), title, dueDate, priority, description)
         
     };
 
@@ -170,7 +170,7 @@ function Controller() {
 function screenController() {
 
     const toDoList = Controller();
-    toDoList.addTask('asfed','06/05/25',3,4,5);
+    toDoList.addTask('asfed','06/05/25',3, 'this is an example of task description');
     toDoList.addTask('a','b','c','d','e');
 
     ////selecting
@@ -353,31 +353,39 @@ function screenController() {
             task.classList.add('task');
             tasks.appendChild(task);
 
-            const checkMarkImgPNG = new Image();
+            const checkMarkImgPNG = new Image();            
             checkMarkImgPNG.src = checkMarkImg;
+            checkMarkImgPNG.classList.add('checkMarkImgPNG')
             task.appendChild(checkMarkImgPNG);
 
+            const taskTitle = document.createElement('h3');
+            taskTitle.classList.add('taskTitle');
+            taskTitle.textContent = activeTask.title;
+            task.appendChild(taskTitle);
 
-            ////task info 
-            const description = document.createElement('div');
-            description.classList.add('description');
-            description.textContent = activeTask.description;
-            task.appendChild(description);
+            const taskDueDate = document.createElement('div');
+            taskDueDate.classList.add('taskDueDate');
+            taskDueDate.textContent = activeTask.dueDate;
+            task.appendChild(taskDueDate);
 
-            const dueDate = document.createElement('div');
-            dueDate.classList.add('dueDate');
-            dueDate.textContent = activeTask.dueDate;
-            task.appendChild(dueDate);
+            task.dataset.priority = activeTask.priority;
+
+            const taskDescription = document.createElement('p');
+            taskDescription.classList.add('taskDescription');
+            taskDescription.textContent = activeTask.description;
+            task.appendChild(taskDescription);
+            
+
             
             // const priority = document.createElement('div');
             // priority.classList.add('priority');
             // priority.textContent = activeTask.priority; 
             // task.appendChild(priority);
 
-            // const notes = document.createElement('div');
-            // notes.classList.add('notes');
-            // notes.textContent = activeTask.notes;
-            // task.appendChild(notes);
+            // const description = document.createElement('div');
+            // description.classList.add('description');
+            // description.textContent = activeTask.description;
+            // task.appendChild(description);
 
 
 
@@ -461,6 +469,64 @@ function screenController() {
 
 
 
+        ////create userForm - addTask
+        const addTaskForm = document.createElement('div');
+        addTaskForm.id = 'addTaskForm';
+        body.appendChild(addTaskForm);
+
+        const addTaskFormUser = document.createElement('form');
+        addTaskFormUser.classList.add('addTaskFormUser');
+        // addTaskFormUser.style.height = '100%';
+        addTaskForm.appendChild(addTaskFormUser);
+
+        const addTaskFormUserHeading = document.createElement('div');
+        addTaskFormUserHeading.classList.add('addTaskFormUserHeading');
+        addTaskFormUser.appendChild(addTaskFormUserHeading);
+        
+        const addTaskFormUserHeadingHTwo = document.createElement('h2');
+        addTaskFormUserHeadingHTwo.textContent = 'Add Task';
+        addTaskFormUserHeading.appendChild(addTaskFormUserHeadingHTwo);
+
+        const addTaskFormUserBody = document.createElement('div');
+        addTaskFormUserBody.classList.add('addTaskFormUserBody');
+        addTaskFormUser.appendChild(addTaskFormUserBody);
+
+        const addTaskFormUserUl = document.createElement('ul');
+        addTaskFormUserUl.classList.add('addTaskFormUserUl');
+        addTaskFormUserBody.appendChild(addTaskFormUserUl);
+
+        const addTaskFormUserLiTitle = document.createElement('li');
+        addTaskFormUserLiTitle.classList.add('addTaskFormUserLiTitle')
+        addTaskFormUserUl.appendChild(addTaskFormUserLiTitle);
+
+        const addTaskFormUserTitleLabel = document.createElement('label');
+        addTaskFormUserTitleLabel.setAttribute('for', 'projectTitle');
+        addTaskFormUserTitleLabel.textContent = 'Task Title ';
+        addTaskFormUserLiTitle.appendChild(addTaskFormUserTitleLabel);
+                
+        const addTaskFormUserTitleInput = document.createElement('input');
+        addTaskFormUserTitleInput.classList.add('addTaskFormTitleInput');
+        addTaskFormUserTitleInput.setAttribute('type', 'text');  
+        addTaskFormUserTitleInput.setAttribute('name', 'projectTitle');
+        addTaskFormUserLiTitle.appendChild(addTaskFormUserTitleInput);
+
+
+        const addTaskFormUserButtons = document.createElement('div');
+        addTaskFormUserButtons.classList.add('addTaskFormUserButtons');
+        addTaskForm.appendChild(addTaskFormUserButtons);
+
+        const addTaskFormUserCancel = document.createElement('button');
+        addTaskFormUserCancel.textContent = 'Cancel';
+        addTaskFormUserButtons.appendChild(addTaskFormUserCancel);
+        
+        
+        
+        const addTaskFormUserAdd = document.createElement('button');
+        addTaskFormUserAdd.textContent = 'Add';
+        addTaskFormUserButtons.appendChild(addTaskFormUserAdd);
+
+
+
 
         ////adding switchProject function to each line item 
         const taskBarContents = document.querySelectorAll('.taskBarContents');
@@ -475,6 +541,7 @@ function screenController() {
     
         
     }
+
 
     function switchProjectClick(e) {
         console.log('running switchProjectClick');
@@ -518,11 +585,12 @@ function screenController() {
         const projectTitle = addProjectFormUserTitleInput.value;
 
         toDoList.addProject(projectTitle);
-        updateScreen();
-        
-
-        
+        updateScreen();        
     }
+
+    // function openTaskForm() {
+    //     const 
+    // }
 
 
 
@@ -594,10 +662,10 @@ function task() {
 
     return {
         title: title,
-        description: description,
+        title: title,
         duedate,
         priority,
-        notes
+        description
         checklist
     }
 
@@ -616,10 +684,10 @@ screenController() {
     function clickHandlerBoard(e) {
         //adding task.... 
         const title
-        const description
+        const title
         const duedate
         const priority
-        const notes
+        const description
         const checklist
 
         controller.addTask(input);
