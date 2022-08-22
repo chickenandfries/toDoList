@@ -153,7 +153,8 @@ function Controller() {
         getBoard,
         getActiveProjectTitle,
         getActiveProjectTasks,
-        switchProjects
+        switchProjects,
+        addProject
     }
      
 }
@@ -285,11 +286,24 @@ function screenController() {
             console.log(board.length);
             const projectsNavProject = document.createElement('div');
             projectsNavProject.classList.add('taskBarContents');
-            ////user input title needed here.... 
-            projectsNavProject.dataset.title = `title`
-            ////projectTargetID is what will be used to switch between taskView 
-            projectsNavProject.dataset.projectTargetID = `${i}`;
+
+            ////user input title needed here.... use title to switch between tasks 
+            projectsNavProject.dataset.projectTitle = `${board[i].title}`
+         
+            // ////projectTargetID is what will be used to switch between taskView 
+            // projectsNavProject.dataset.projectTargetID = `${i}`;
+
+
             projectsNav.appendChild(projectsNavProject);
+
+
+            const projectNavProjectHThree = document.createElement('h3');
+            projectNavProjectHThree.textContent = `${board[i].title}`;
+            projectsNavProject.appendChild(projectNavProjectHThree);
+
+
+            
+            
         }
         
     
@@ -481,8 +495,6 @@ function screenController() {
 
 
 
-
-
     function openProjectForm() {
         const addProjectForm = document.querySelector('#addProjectForm');
         addProjectForm.style.display = 'block';
@@ -507,6 +519,7 @@ function screenController() {
 
         toDoList.addProject(projectTitle);
         updateScreen();
+        
 
         
     }
