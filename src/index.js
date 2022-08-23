@@ -6,6 +6,7 @@ import todayImg from './img/today.png';
 import upcomingImg from './img/upcoming.png';
 import addProjectImg from './img/addProject.png';
 import checkMarkImg from './img/checkMark.png';
+import flagImg from './img/flag.png';
 
 
 
@@ -399,6 +400,9 @@ function screenController() {
         addTask.textContent = '+ Add Task';
         tasks.appendChild(addTask);
 
+        addTask.addEventListener('click', openTaskForm);
+
+
 
         ////create footer
         const footer = document.createElement('footer');
@@ -496,30 +500,75 @@ function screenController() {
         addTaskFormUserBody.appendChild(addTaskFormUserUl);
 
         const addTaskFormUserLiTitle = document.createElement('li');
-        addTaskFormUserLiTitle.classList.add('addTaskFormUserLiTitle')
+        addTaskFormUserLiTitle.classList.add('addTaskFormUserLi')
         addTaskFormUserUl.appendChild(addTaskFormUserLiTitle);
 
         const addTaskFormUserTitleLabel = document.createElement('label');
-        addTaskFormUserTitleLabel.setAttribute('for', 'projectTitle');
+        addTaskFormUserTitleLabel.setAttribute('for', 'taskTitle');
         addTaskFormUserTitleLabel.textContent = 'Task Title ';
         addTaskFormUserLiTitle.appendChild(addTaskFormUserTitleLabel);
                 
         const addTaskFormUserTitleInput = document.createElement('input');
+        addTaskFormUserTitleInput.classList.add('addTaskFormInput');
         addTaskFormUserTitleInput.classList.add('addTaskFormTitleInput');
         addTaskFormUserTitleInput.setAttribute('type', 'text');  
-        addTaskFormUserTitleInput.setAttribute('name', 'projectTitle');
+        addTaskFormUserTitleInput.setAttribute('name', 'taskTitle');
         addTaskFormUserLiTitle.appendChild(addTaskFormUserTitleInput);
 
+        const addTaskFormUserLiDescription = document.createElement('li');
+        addTaskFormUserLiDescription.classList.add('addTaskFormUserLi')
+        addTaskFormUserUl.appendChild(addTaskFormUserLiDescription);
 
+        const addTaskFormUserDescriptionLabel = document.createElement('label');
+        addTaskFormUserDescriptionLabel.setAttribute('for', 'taskDescription');
+        addTaskFormUserDescriptionLabel.textContent = 'Task Description ';
+        addTaskFormUserLiDescription.appendChild(addTaskFormUserDescriptionLabel);
+                
+        const addTaskFormUserDescriptionInput = document.createElement('input');
+        addTaskFormUserDescriptionInput.classList.add('addTaskFormInput');
+        addTaskFormUserDescriptionInput.classList.add('addTaskFormDescriptionInput');
+        addTaskFormUserDescriptionInput.setAttribute('type', 'text');  
+        addTaskFormUserDescriptionInput.setAttribute('name', 'taskDescription');
+        addTaskFormUserLiDescription.appendChild(addTaskFormUserDescriptionInput);
+
+        const addTaskFormUserLiDueDate = document.createElement('li');
+        addTaskFormUserLiDueDate.classList.add('addTaskFormUserLi')
+        addTaskFormUserUl.appendChild(addTaskFormUserLiDueDate);
+
+        const addTaskFormUserDueDateLabel = document.createElement('label');
+        addTaskFormUserDueDateLabel.setAttribute('for', 'taskDueDate');
+        addTaskFormUserDueDateLabel.textContent = 'Task DueDate ';
+        addTaskFormUserLiDueDate.appendChild(addTaskFormUserDueDateLabel);
+                
+        const addTaskFormUserDueDateInput = document.createElement('input');
+        addTaskFormUserDueDateInput.classList.add('addTaskFormInput');
+        addTaskFormUserDueDateInput.classList.add('addTaskFormDueDateInput');
+        addTaskFormUserDueDateInput.setAttribute('type', 'text');  
+        addTaskFormUserDueDateInput.setAttribute('name', 'taskDueDate');
+        addTaskFormUserLiDueDate.appendChild(addTaskFormUserDueDateInput);
+
+
+        
         const addTaskFormUserButtons = document.createElement('div');
         addTaskFormUserButtons.classList.add('addTaskFormUserButtons');
         addTaskForm.appendChild(addTaskFormUserButtons);
 
+        const addTaskFormUserPriority = document.createElement('div');
+        addTaskFormUserButtons.appendChild(addTaskFormUserPriority);
+        const flagImgPNG = new Image();
+        flagImgPNG.src = flagImg;
+        addTaskFormUserPriority.appendChild(flagImgPNG);
+
+
+
+   
+
         const addTaskFormUserCancel = document.createElement('button');
         addTaskFormUserCancel.textContent = 'Cancel';
         addTaskFormUserButtons.appendChild(addTaskFormUserCancel);
-        
-        
+
+        addTaskFormUserCancel.addEventListener('click', cancelTaskForm);
+                
         
         const addTaskFormUserAdd = document.createElement('button');
         addTaskFormUserAdd.textContent = 'Add';
@@ -588,9 +637,33 @@ function screenController() {
         updateScreen();        
     }
 
-    // function openTaskForm() {
-    //     const 
-    // }
+    function openTaskForm() {
+        const addTaskForm = document.querySelector('#addTaskForm');
+        addTaskForm.style.display = 'block';
+        
+    }
+
+    function cancelTaskForm() {
+        const addTaskFormInputs = document.querySelectorAll('.addTaskFormInput');
+
+        for (let addTaskFormInput of addTaskFormInputs) {
+            addTaskFormInput.value = '';
+        }
+
+        const addTaskForm = document.querySelector('#addTaskForm');
+        addTaskForm.style.display = 'none';
+
+    }
+
+    function taskFormSubmit() {
+        const taskTitle = document.querySelector('.addTaskFormTitleInput').value;
+        const taskDescription = document.querySelector('.addTaskFormDescriptionInput').value;
+        const taskDueDate = document.querySelector('.addTaskFormDueDateInput').value;
+        toDoList.addTask()
+
+    }
+
+ 
 
 
 

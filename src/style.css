@@ -156,6 +156,11 @@ header h1 {
 }
 
 
+.addTask {
+    height: 2rem;
+    display: flex;
+    align-items: center;
+}
 
 
 
@@ -242,15 +247,25 @@ header h1 {
     flex-direction: column;
 }
 
-.addTaskFormUserLiTitle {
+.addTaskFormUserLi {
     display: flex;
     flex-direction: column;
 
 }
 
+.addTaskFormUserUl input {
+    background-color: white;
+    border: none;
+    
+}
+
 .addTaskFormUserButtons {
     margin-top: 100px;
     align-self: flex-end;
+}
+
+.addTaskFormUserPriority {
+    background-color: red;
 }
 
 /* .addProjectFormUserHeadingHTwo {
