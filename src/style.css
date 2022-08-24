@@ -260,13 +260,22 @@ header h1 {
 }
 
 .addTaskFormUserButtons {
-    margin-top: 100px;
-    align-self: flex-end;
+    
+
 }
 
-.addTaskFormUserPriority {
+
+.flagImgPNG1 {
     background-color: red;
 }
+.flagImgPNG2 {
+    background-color: orange;
+}
+
+.flagImgPNG3 {
+    background-color: skyblue;
+}
+
 
 /* .addProjectFormUserHeadingHTwo {
     text-align: center;

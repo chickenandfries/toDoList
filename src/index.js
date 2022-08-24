@@ -19,7 +19,6 @@ function Board() {
     board.push(Project('inbox', 0));
     board.push(Project('today', 1));
     board.push(Project('upcoming', 2));
-
  
 
     // const addProject = () => {
@@ -85,18 +84,23 @@ function Project(title) {
 }
 
 
-function Task(title, dueDate, priority, description) {
+function Task(title, dueDate, priority = 4, description) {
 
-    // priority = [
-    //     1,
-    //     2,
-    //     3,
-    // ]
+    const priorityList = [
+        'p1',
+        'p2',
+        'p3',
+        'p4'
+    ]
+
+    let selectedPriority = priorityList[priority-1];
+
+  
 
     return {
         title: title,
         dueDate: dueDate,
-        priority: priority,
+        selectedPriority,
         description: description,
 
     }
@@ -110,19 +114,25 @@ function Task(title, dueDate, priority, description) {
 function Controller() {
     ////initial set up
     let board = Board();
+    let boardBoard = board.getBoard();
     let activeProject = board.getBoard()[0];
     console.log(activeProject);
+
+    let activeTask = activeProject.tasks[0];
+    console.log(activeTask);
+    
+
         
 
-    const getActiveProjectTitle = () => activeProject.title; 
+    let getActiveProjectTitle = () => activeProject.title; 
 
-    const getActiveProjectTasks = () => activeProject.tasks;
+    let getActiveProjectTasks = () => activeProject.tasks;
     console.log(getActiveProjectTasks());
 
 
+
+
     const switchProjects = (selectedProjectTitle) => {
-        const boardBoard = board.getBoard();
-  
         
         for (let i=0; i < boardBoard.length; i++) {
             if (boardBoard[i].title === selectedProjectTitle) {
@@ -132,9 +142,17 @@ function Controller() {
         }
         console.log(activeProject);
         console.log(getActiveProjectTasks());
-        
-        
     }
+
+    const switchTasks = (selectedTaskTitle) => {
+        for (let i=0; i < getActiveProjectTasks().length; i++) {
+            if (getActiveProjectTasks()[i].title === selectedTaskTitle) {
+
+                activeTask = getActiveProjectTasks()[i];
+            }
+        }
+    }
+
 
     const addTask = (title, dueDate, priority, description) => {
         board.addTask(getActiveProjectTitle(), title, dueDate, priority, description)
@@ -147,6 +165,7 @@ function Controller() {
 
 
     const getBoard = () => board.getBoard();
+
 
 
     return {
@@ -554,14 +573,33 @@ function screenController() {
         addTaskForm.appendChild(addTaskFormUserButtons);
 
         const addTaskFormUserPriority = document.createElement('div');
+        addTaskFormUserPriority.classList.add('addTaskFormUserPriority')
         addTaskFormUserButtons.appendChild(addTaskFormUserPriority);
-        const flagImgPNG = new Image();
-        flagImgPNG.src = flagImg;
-        addTaskFormUserPriority.appendChild(flagImgPNG);
 
+        const addTaskFormUserPriorityHeading = document.createElement('div');
+        addTaskFormUserPriority.appendChild(addTaskFormUserPriorityHeading);
 
+        const addTaskFormUserPriorityHeadingLabel = document.createElement('label');
+        addTaskFormUserPriorityHeadingLabel.textContent = 'Priority';
+        addTaskFormUserPriorityHeading.appendChild(addTaskFormUserPriorityHeadingLabel);
 
-   
+        const addTaskFormUserPriorityFlags = document.createElement('div');
+        addTaskFormUserPriority.appendChild(addTaskFormUserPriorityFlags);
+
+        
+        for (let i=1; i<5; i++) {
+            const flagImgPNG = new Image();
+            flagImgPNG.src = flagImg;
+            flagImgPNG.classList.add(`flagImgPNG${i}`);
+            flagImgPNG.dataset.priority = i;
+            flagImgPNG.addEventListener('click', selectPriorityClick);
+            addTaskFormUserPriorityFlags.appendChild(flagImgPNG);
+        }
+
+        let priorityInput = 'p4';
+
+ 
+  
 
         const addTaskFormUserCancel = document.createElement('button');
         addTaskFormUserCancel.textContent = 'Cancel';
@@ -573,6 +611,9 @@ function screenController() {
         const addTaskFormUserAdd = document.createElement('button');
         addTaskFormUserAdd.textContent = 'Add';
         addTaskFormUserButtons.appendChild(addTaskFormUserAdd);
+        
+        addTaskFormUserAdd.addEventListener('click', taskFormSubmit);
+
 
 
 
@@ -655,11 +696,24 @@ function screenController() {
 
     }
 
+
     function taskFormSubmit() {
         const taskTitle = document.querySelector('.addTaskFormTitleInput').value;
         const taskDescription = document.querySelector('.addTaskFormDescriptionInput').value;
         const taskDueDate = document.querySelector('.addTaskFormDueDateInput').value;
+        const taskPriority = 
+
         toDoList.addTask()
+
+    }
+
+    function selectPriorityClick(e) {
+        const priorityDataset = e.target.dataset.priority;
+        console.log('selectPriorityClick running');
+                
+        if (!priorityDataset) return;
+
+        return priorityDataset
 
     }
 
