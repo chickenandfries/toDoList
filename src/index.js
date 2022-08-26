@@ -47,6 +47,15 @@ function Board() {
         return board   
     }
 
+    const switchTaskPriority = () => {
+        /*
+        1. select correct task
+        2. input index to put into task.ChangePriority(i);
+        */
+
+        
+    }
+
     // const addTask = (projectTitle) => {
     //     // const pickedProject = board.filter((project) => project.title === projectTitle)
         
@@ -93,7 +102,13 @@ function Task(title, dueDate, priority = 4, description) {
         'p4'
     ]
 
-    let selectedPriority = priorityList[priority-1];
+    let selectedPriority = priorityList[3];
+
+    const changePriority = (priority) => {
+        selectedPriority = priorityList[priority-1]
+    }
+
+    const getPriority = () => selectedPriority;
 
   
 
@@ -102,7 +117,8 @@ function Task(title, dueDate, priority = 4, description) {
         dueDate: dueDate,
         selectedPriority,
         description: description,
-
+        changePriority,
+        getPriority,
     }
 
 
@@ -116,20 +132,24 @@ function Controller() {
     let board = Board();
     let boardBoard = board.getBoard();
     let activeProject = board.getBoard()[0];
+    
     console.log(activeProject);
+
+    // for (let task of activeProject.tasks) {
+    //     console.log(task.title);
+        
+    // }
+
+    console.log(activeProject.tasks);
+       
 
     let activeTask = activeProject.tasks[0];
     console.log(activeTask);
-    
-
         
-
     let getActiveProjectTitle = () => activeProject.title; 
 
     let getActiveProjectTasks = () => activeProject.tasks;
     console.log(getActiveProjectTasks());
-
-
 
 
     const switchProjects = (selectedProjectTitle) => {
