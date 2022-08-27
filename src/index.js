@@ -47,14 +47,26 @@ function Board() {
         return board   
     }
 
-    const switchTaskPriority = () => {
-        /*
-        1. select correct task
-        2. input index to put into task.ChangePriority(i);
-        */
-
+    // const inputTaskPriority = (projectTitle, taskTitle, priority) => {
+    //     /*
+    //     1. select correct task
+    //     2. input index to put into task.ChangePriority(i);
+    //     */
         
-    }
+
+    //     for (let i = 0; i< board.length; i++) {
+    //         if (board[i].title === projectTitle) {
+    //             for (let j=0; j < board[i].tasks.length; j++) {
+    //                 if (board[i].title === taskTitle) {
+    //                     board
+                        
+    //                 }
+    //             }
+                
+    //         }
+    //     }
+        
+    // }
 
     // const addTask = (projectTitle) => {
     //     // const pickedProject = board.filter((project) => project.title === projectTitle)
@@ -93,6 +105,7 @@ function Project(title) {
 }
 
 
+
 function Task(title, dueDate, priority = 4, description) {
 
     const priorityList = [
@@ -104,9 +117,10 @@ function Task(title, dueDate, priority = 4, description) {
 
     let selectedPriority = priorityList[3];
 
-    const changePriority = (priority) => {
+    const inputPriority = (priority) => {
         selectedPriority = priorityList[priority-1]
     }
+
 
     const getPriority = () => selectedPriority;
 
@@ -117,7 +131,7 @@ function Task(title, dueDate, priority = 4, description) {
         dueDate: dueDate,
         selectedPriority,
         description: description,
-        changePriority,
+        inputPriority,
         getPriority,
     }
 
@@ -130,9 +144,27 @@ function Task(title, dueDate, priority = 4, description) {
 function Controller() {
     ////initial set up
     let board = Board();
+
     let boardBoard = board.getBoard();
     let activeProject = board.getBoard()[0];
+
+
+
+    console.log(boardBoard);
     
+       
+
+    let activeTask = activeProject.tasks;
+    console.log(activeTask);
+        
+    let getActiveProjectTitle = () => activeProject.title; 
+
+    let getActiveProjectTasks = () => activeProject.tasks;
+    console.log(getActiveProjectTasks());
+
+    board.addTask(getActiveProjectTitle(), 'asfed','06/05/25',3, 'this is an example of task description');
+    board.addTask(getActiveProjectTitle(), 'a','b','c','d','e');
+
     console.log(activeProject);
 
     // for (let task of activeProject.tasks) {
@@ -141,15 +173,8 @@ function Controller() {
     // }
 
     console.log(activeProject.tasks);
-       
+    console.log(activeProject.tasks[0]);
 
-    let activeTask = activeProject.tasks[0];
-    console.log(activeTask);
-        
-    let getActiveProjectTitle = () => activeProject.title; 
-
-    let getActiveProjectTasks = () => activeProject.tasks;
-    console.log(getActiveProjectTasks());
 
 
     const switchProjects = (selectedProjectTitle) => {
@@ -163,6 +188,7 @@ function Controller() {
         console.log(activeProject);
         console.log(getActiveProjectTasks());
     }
+
 
     const switchTasks = (selectedTaskTitle) => {
         for (let i=0; i < getActiveProjectTasks().length; i++) {
@@ -210,8 +236,7 @@ function Controller() {
 function screenController() {
 
     const toDoList = Controller();
-    toDoList.addTask('asfed','06/05/25',3, 'this is an example of task description');
-    toDoList.addTask('a','b','c','d','e');
+
 
     ////selecting
     const body = document.querySelector('body')  
@@ -671,12 +696,16 @@ function screenController() {
     }
 
 
-
-    function openProjectForm() {
+    const openProjectForm = function() {
         const addProjectForm = document.querySelector('#addProjectForm');
         addProjectForm.style.display = 'block';
+
     }
 
+    // function openProjectForm() {
+    //     const addProjectForm = document.querySelector('#addProjectForm');
+    //     addProjectForm.style.display = 'block';
+    // }
 
 
     function cancelProjectForm() {
@@ -703,6 +732,7 @@ function screenController() {
         addTaskForm.style.display = 'block';
         
     }
+
 
     function cancelTaskForm() {
         const addTaskFormInputs = document.querySelectorAll('.addTaskFormInput');
