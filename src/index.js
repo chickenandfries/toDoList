@@ -33,8 +33,10 @@ function Board() {
         return activeProject 
     }
 
-    const addTask = (projectTitle, ...taskInputs) => {
-        // const projectTitle = projectTitle;
+    const addTask = (projectTitle, ...taskInputs) => {        
+        console.log(`taskInputs`);        
+        console.log(...taskInputs);
+        
 
         for (let i = 0; i< board.length; i++) {
             if (board[i].title === projectTitle) {
@@ -115,11 +117,13 @@ function Task(title, dueDate, priority = 4, description) {
         'p4'
     ]
 
-    let selectedPriority = priorityList[3];
+    let selectedPriority = priorityList[priority-1];
 
-    const inputPriority = (priority) => {
-        selectedPriority = priorityList[priority-1]
-    }
+    setTimeout(() => {
+        console.log(`this is selectedPriority = ${selectedPriority}`);
+    }, 3000)
+    
+    
 
 
     const getPriority = () => selectedPriority;
@@ -131,7 +135,6 @@ function Task(title, dueDate, priority = 4, description) {
         dueDate: dueDate,
         selectedPriority,
         description: description,
-        inputPriority,
         getPriority,
     }
 
@@ -149,31 +152,21 @@ function Controller() {
     let activeProject = board.getBoard()[0];
 
 
-
+    console.log(`this is boardBoard`);
     console.log(boardBoard);
-    
-       
+           
 
     let activeTask = activeProject.tasks;
-    console.log(activeTask);
+
         
     let getActiveProjectTitle = () => activeProject.title; 
 
     let getActiveProjectTasks = () => activeProject.tasks;
-    console.log(getActiveProjectTasks());
 
-    board.addTask(getActiveProjectTitle(), 'asfed','06/05/25',3, 'this is an example of task description');
-    board.addTask(getActiveProjectTitle(), 'a','b','c','d','e');
 
-    console.log(activeProject);
+    board.addTask(getActiveProjectTitle(), 'asfed','06/05/25', '1', 'this is an example of task description');
+    board.addTask(getActiveProjectTitle(), 'a','b','4','e');
 
-    // for (let task of activeProject.tasks) {
-    //     console.log(task.title);
-        
-    // }
-
-    console.log(activeProject.tasks);
-    console.log(activeProject.tasks[0]);
 
 
 
@@ -185,8 +178,7 @@ function Controller() {
                 activeProject = boardBoard[i];
             }
         }
-        console.log(activeProject);
-        console.log(getActiveProjectTasks());
+
     }
 
 
@@ -204,6 +196,7 @@ function Controller() {
         board.addTask(getActiveProjectTitle(), title, dueDate, priority, description)
         
     };
+
 
     const addProject = (projectTitle) => {
         board.addProject(projectTitle)
@@ -226,12 +219,6 @@ function Controller() {
 }
 
 
-// const butt = Task('a', 'b', 'd', 1, 'asdf')
-// console.log(butt);
-
-// const board = Board();
-// console.log(board.getBoard());
-
 
 function screenController() {
 
@@ -241,9 +228,6 @@ function screenController() {
     ////selecting
     const body = document.querySelector('body')  
 
-    // const board = toDoList.getBoard();
-    // console.log(board);
-    
 
     const updateScreen = () => {
         ////CLEAR////
@@ -251,7 +235,7 @@ function screenController() {
 
         ////GET STUFF FROM BOARD////
         const board = toDoList.getBoard();
-        console.log(board);
+
            
 
         let activeProjectTitle = toDoList.getActiveProjectTitle();
@@ -267,10 +251,7 @@ function screenController() {
         headerTitle.textContent = 'ToDoList'
         header.appendChild(headerTitle);
     
-        // const headerTitleHOne = document.createElement('h1');
-        // headerTitleHOne.textContent = 'ToDoList'
-        // headerTitle.appendChild(headerTitleHOne);
-    
+
     
         ////create taskbar 
         const taskBar = document.createElement('div');
@@ -348,7 +329,7 @@ function screenController() {
 
         ////create DOM elements for projects 
         for (let i=3; i < board.length; i++) {
-            console.log(board.length);
+  
             const projectsNavProject = document.createElement('div');
             projectsNavProject.classList.add('taskBarContents');
 
@@ -407,7 +388,6 @@ function screenController() {
         tasks.classList.add('tasks');
         taskView.appendChild(tasks);
 
-        console.log(toDoList.getActiveProjectTitle());
         
 
         ////create tasks list 
@@ -416,11 +396,28 @@ function screenController() {
             ////create task 
             const task = document.createElement('div');
             task.classList.add('task');
+            task.dataset.tasktitle = activeTask.title;
             tasks.appendChild(task);
 
             const checkMarkImgPNG = new Image();            
             checkMarkImgPNG.src = checkMarkImg;
-            checkMarkImgPNG.classList.add('checkMarkImgPNG')
+            checkMarkImgPNG.classList.add('checkMarkImgPNG');
+            // checkMarkImgPNG.style.backgroundColor = 'red';
+
+            
+            if (activeTask.selectedPriority === 'p1') {
+
+                
+                checkMarkImgPNG.style.backgroundColor ='red';
+            }   else if (activeTask.selectedPriority === 'p2') {
+                checkMarkImgPNG.style.backgroundColor ='orange';
+            }   else if (activeTask.selectedPriority === 'p3') {
+                checkMarkImgPNG.style.backgroundColor ='skyblue';
+            }   else if (activeTask.selectedPriority === 'p4') {
+                checkMarkImgPNG.style.backgroundColor ='none';
+            }
+
+
             task.appendChild(checkMarkImgPNG);
 
             const taskTitle = document.createElement('h3');
@@ -682,12 +679,10 @@ function screenController() {
         console.log('running switchProjectClick');
 
         const selectedProjectTitle = e.target.dataset.projectTitle;
-        console.log(`${selectedProjectTitle} has run`);
-        console.log(typeof selectedProjectTitle);
+
 
         ////if what was clicked on doesn't have projectTitle, return 
         if (!selectedProjectTitle) return;
-        console.log(`did not return `);
 
         toDoList.switchProjects(selectedProjectTitle);
 
@@ -727,6 +722,14 @@ function screenController() {
         updateScreen();        
     }
 
+        
+    function addTask(title, dueDate, priority, description) {
+        toDoList.addTask(title, dueDate, priority, description)
+
+        
+    }
+
+
     function openTaskForm() {
         const addTaskForm = document.querySelector('#addTaskForm');
         addTaskForm.style.display = 'block';
@@ -747,25 +750,36 @@ function screenController() {
     }
 
 
+    let taskPriority = '4';
+    function selectPriorityClick(e) {
+        taskPriority = e.target.dataset.priority;
+        console.log('selectPriorityClick running');
+                
+        if (!taskPriority) return;
+
+        
+    }
+
+
     function taskFormSubmit() {
         const taskTitle = document.querySelector('.addTaskFormTitleInput').value;
         const taskDescription = document.querySelector('.addTaskFormDescriptionInput').value;
         const taskDueDate = document.querySelector('.addTaskFormDueDateInput').value;
-        const taskPriority = 
 
-        toDoList.addTask()
+        
 
-    }
+        console.log(`this is priority: ${taskPriority}`);
+        toDoList.addTask(taskTitle, taskDueDate, taskPriority, taskDescription)
+        
+        cancelTaskForm();
+        updateScreen();
 
-    function selectPriorityClick(e) {
-        const priorityDataset = e.target.dataset.priority;
-        console.log('selectPriorityClick running');
-                
-        if (!priorityDataset) return;
-
-        return priorityDataset
 
     }
+
+
+  
+
 
  
 
@@ -779,7 +793,6 @@ function screenController() {
     //initial render 
     updateScreen();
 
-    console.log('updateScreen has run');
 
 
 
@@ -792,9 +805,6 @@ console.log('------------------');
 
 
 screenController();
-
-console.log(`checking`);
-
 
 
 
