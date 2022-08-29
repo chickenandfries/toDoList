@@ -28,10 +28,10 @@ function Board() {
         board.push(Project(title))
     }
 
-    const getProject = (projectTitle) => {
-        const activeProject = board.filter((project) => project.title === projectTitle);
-        return activeProject 
-    }
+    // const getProject = (projectTitle) => {
+    //     const activeProject = board.filter((project) => project.title === projectTitle);
+    //     return activeProject 
+    // }
 
     const addTask = (projectTitle, ...taskInputs) => {        
         console.log(`taskInputs`);        
@@ -48,6 +48,8 @@ function Board() {
 
         return board   
     }
+
+
 
     // const inputTaskPriority = (projectTitle, taskTitle, priority) => {
     //     /*
@@ -212,7 +214,8 @@ function Controller() {
         getActiveProjectTitle,
         getActiveProjectTasks,
         switchProjects,
-        addProject
+        addProject,
+        switchTasks
     }
      
 }
@@ -254,7 +257,7 @@ function screenController() {
     
         ////create taskbar 
         const taskBar = document.createElement('div');
-        taskBar.classList.add('taskBar');
+        taskBar.classList.add('`task`Bar');
         body.appendChild(taskBar);
     
     
@@ -396,7 +399,7 @@ function screenController() {
             ////create task 
             const task = document.createElement('div');
             task.classList.add('task');
-            task.dataset.tasktitle = activeTask.title;
+            task.dataset.taskTitle = activeTask.title;
             tasks.appendChild(task);
 
             const checkMarkImgPNG = new Image();            
@@ -663,9 +666,9 @@ function screenController() {
         ////adding switchProject function to each line item 
         const taskBarContents = document.querySelectorAll('.taskBarContents');
         taskBarContents.forEach((taskBarContent) => {
-            taskBarContent.addEventListener('click', switchProjectClick)
+            taskBarContent.addEventListener('click', switchProjectsClick)
         })
-        console.log('switchProjectClick event has been added')
+        console.log('switchProjectsClick event has been added')
 
     
 
@@ -675,8 +678,8 @@ function screenController() {
     }
 
 
-    function switchProjectClick(e) {
-        console.log('running switchProjectClick');
+    function switchProjectsClick(e) {
+        console.log('running switchProjectsClick');
         console.log(e.target);
         
         ////remove activeProject class from previous activeProject
@@ -763,6 +766,9 @@ function screenController() {
 
 
     let taskPriority = '4';
+    console.log(toDoList.getActiveProjectTasks());
+    
+    
     function selectPriorityClick(e) {
         taskPriority = e.target.dataset.priority;
         console.log('selectPriorityClick running');
@@ -788,6 +794,43 @@ function screenController() {
 
 
     }
+
+    function switchTasksClick(e) {
+        /*
+        1. get Active project
+        2. for... tasks, 
+            if task.title === selectedTaskTitle
+            change active Task 
+
+        */
+        
+
+        ////grab the title from the task that was clicked on 
+        const selectedTaskTitle = e.target.dataset.taskTitle;
+        ////if what was clicked on doesn't have taskTitle, return 
+        if (!selectedTaskTitle) return;
+
+        toDoList.switchProjects(selectedTaskTitle);
+
+        updateScreen();
+       
+      
+    }
+
+
+
+
+    
+
+    // function editTask() {
+    //     /*
+    //     1. 
+    
+
+
+    //     */
+
+    // }
 
 
   
