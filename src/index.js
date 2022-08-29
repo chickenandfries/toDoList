@@ -119,9 +119,9 @@ function Task(title, dueDate, priority = 4, description) {
 
     let selectedPriority = priorityList[priority-1];
 
-    setTimeout(() => {
-        console.log(`this is selectedPriority = ${selectedPriority}`);
-    }, 3000)
+    // setTimeout(() => {
+    //     console.log(`this is selectedPriority = ${selectedPriority}`);
+    // }, 3000)
     
     
 
@@ -206,7 +206,6 @@ function Controller() {
     const getBoard = () => board.getBoard();
 
 
-
     return {
         addTask,
         getBoard,
@@ -266,6 +265,7 @@ function screenController() {
     
         const inbox = document.createElement('div');
         inbox.classList.add('taskBarContents');
+        inbox.classList.add('activeProject');
         inbox.dataset.projectTitle = 'inbox';
     
         taskBarTop.appendChild(inbox);
@@ -375,12 +375,12 @@ function screenController() {
         body.appendChild(taskView);
 
         ////showing which project is active
-        const activeProject = document.createElement('h2');
-        activeProject.classList.add('activeProject');
+        const activeProjectHeading = document.createElement('h2');
+        activeProjectHeading.classList.add('activeProjectHeading');
         console.log(`this is activeProjectTitle: ${activeProjectTitle}`);
         
-        activeProject.textContent = activeProjectTitle;
-        taskView.appendChild(activeProject);
+        activeProjectHeading.textContent = activeProjectTitle;
+        taskView.appendChild(activeProjectHeading);
 
 
         ////tasks 
@@ -549,7 +549,7 @@ function screenController() {
         addTaskFormUser.appendChild(addTaskFormUserHeading);
         
         const addTaskFormUserHeadingHTwo = document.createElement('h2');
-        addTaskFormUserHeadingHTwo.textContent = 'Add Task';
+        addTaskFormUserHeadingHTwo.textContent = 'Task Info';
         addTaskFormUserHeading.appendChild(addTaskFormUserHeadingHTwo);
 
         const addTaskFormUserBody = document.createElement('div');
@@ -677,10 +677,22 @@ function screenController() {
 
     function switchProjectClick(e) {
         console.log('running switchProjectClick');
+        console.log(e.target);
+        
+        ////remove activeProject class from previous activeProject
+        const taskBarContents = document.querySelectorAll('.taskBarContents');
+        taskBarContents.forEach((taskBarContent) => {
+            taskBarContent.classList.remove('activeProject')
+        });
 
+        console.log(e.target);
+        
+        ////add activeProject class to project that was just clicked on 
+        e.target.classList.add('activeProject');
+   
+
+        ////grab the title from the project that was clicked on 
         const selectedProjectTitle = e.target.dataset.projectTitle;
-
-
         ////if what was clicked on doesn't have projectTitle, return 
         if (!selectedProjectTitle) return;
 

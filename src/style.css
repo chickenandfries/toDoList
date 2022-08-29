@@ -72,6 +72,17 @@ header h1 {
 
 }
 
+.taskBarContents:hover{
+    background-color: red;
+}
+
+
+.activeProject {
+    background-color:red;
+}
+
+
+
 .projects {
     grid-column-start: 1;
     grid-column-end: 2;
@@ -161,8 +172,13 @@ header h1 {
     height: 2rem;
     display: flex;
     align-items: center;
+
 }
 
+.addTask:hover {
+    background-color:#696868 ;
+
+}
 
 
 
