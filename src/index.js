@@ -199,7 +199,7 @@ function Controller() {
     }
 
 
-    const getBoard = () => board.getBoard();
+    const getBoard = () => boardBoard
 
 
     return {
@@ -236,8 +236,7 @@ function screenController() {
 
         let activeProjectTitle = toDoList.getActiveProjectTitle();
         console.log(`this is activeProjectTitle: ${activeProjectTitle}`);
-        
-   
+           
     
         ////create header
         const header = document.createElement('header');
@@ -251,10 +250,9 @@ function screenController() {
     
         ////create taskbar 
         const taskBar = document.createElement('div');
-        taskBar.classList.add('`task`Bar');
+        taskBar.classList.add('taskBar');
         body.appendChild(taskBar);
-    
-    
+        
         ////taskBarTop
         const taskBarTop = document.createElement('nav');
         taskBarTop.classList.add('taskBarTop');
@@ -262,7 +260,7 @@ function screenController() {
     
         const inbox = document.createElement('div');
         inbox.classList.add('taskBarContents');
-        inbox.classList.add('activeProject');
+        // inbox.classList.add('activeProject');
         inbox.dataset.projectTitle = 'inbox';
     
         taskBarTop.appendChild(inbox);
@@ -388,12 +386,12 @@ function screenController() {
         
 
         ////create tasks list 
-        toDoList.getActiveProjectTasks().forEach((activeTask) => {
+        toDoList.getActiveProjectTasks().forEach((projectTask) => {
 
             ////create task 
             const task = document.createElement('div');
             task.classList.add('task');
-            task.dataset.taskTitle = activeTask.title;
+            task.dataset.taskTitle = projectTask.title;
             tasks.appendChild(task);
 
             const checkMarkImgPNG = new Image();            
@@ -402,15 +400,15 @@ function screenController() {
             // checkMarkImgPNG.style.backgroundColor = 'red';
 
             
-            if (activeTask.selectedPriority === 'p1') {
+            if (projectTask.selectedPriority === 'p1') {
 
                 
                 checkMarkImgPNG.style.backgroundColor ='red';
-            }   else if (activeTask.selectedPriority === 'p2') {
+            }   else if (projectTask.selectedPriority === 'p2') {
                 checkMarkImgPNG.style.backgroundColor ='orange';
-            }   else if (activeTask.selectedPriority === 'p3') {
+            }   else if (projectTask.selectedPriority === 'p3') {
                 checkMarkImgPNG.style.backgroundColor ='skyblue';
-            }   else if (activeTask.selectedPriority === 'p4') {
+            }   else if (projectTask.selectedPriority === 'p4') {
                 checkMarkImgPNG.style.backgroundColor ='none';
             }
 
@@ -419,19 +417,19 @@ function screenController() {
 
             const taskTitle = document.createElement('h3');
             taskTitle.classList.add('taskTitle');
-            taskTitle.textContent = activeTask.title;
+            taskTitle.textContent = projectTask.title;
             task.appendChild(taskTitle);
 
             const taskDueDate = document.createElement('div');
             taskDueDate.classList.add('taskDueDate');
-            taskDueDate.textContent = activeTask.dueDate;
+            taskDueDate.textContent = projectTask.dueDate;
             task.appendChild(taskDueDate);
 
-            task.dataset.priority = activeTask.priority;
+            task.dataset.priority = projectTask.priority;
 
             const taskDescription = document.createElement('p');
             taskDescription.classList.add('taskDescription');
-            taskDescription.textContent = activeTask.description;
+            taskDescription.textContent = projectTask.description;
             task.appendChild(taskDescription);
             
 
@@ -664,7 +662,16 @@ function screenController() {
         })
         console.log('switchProjectsClick event has been added')
 
-    
+
+        ////get activeProject, highlight 
+        taskBarContents.forEach((taskBarContent) => {
+            if (taskBarContent.dataset.projectTitle === activeProjectTitle) {
+                taskBarContent.classList.add('activeProject');
+            }
+        })
+
+
+
 
     
     
@@ -672,22 +679,15 @@ function screenController() {
     }
 
 
+    // ////inbox gets activeProject by default
+    // const inbox = document.querySelector('[data-projectTitle="inbox"]');
+    // inbox.classList.add('activeProject')
+    
+
     function switchProjectsClick(e) {
-        console.log('running switchProjectsClick');
+        console.log(`below is switchProjectsClick target`);
         console.log(e.target);
         
-        ////remove activeProject class from previous activeProject
-        const taskBarContents = document.querySelectorAll('.taskBarContents');
-        taskBarContents.forEach((taskBarContent) => {
-            taskBarContent.classList.remove('activeProject')
-        });
-
-        console.log(e.target);
-        
-        ////add activeProject class to project that was just clicked on 
-        e.target.classList.add('activeProject');
-   
-
         ////grab the title from the project that was clicked on 
         const selectedProjectTitle = e.target.dataset.projectTitle;
         ////if what was clicked on doesn't have projectTitle, return 
@@ -807,6 +807,8 @@ function screenController() {
         toDoList.switchProjects(selectedTaskTitle);
 
         updateScreen();
+
+        
        
       
     }
@@ -842,6 +844,7 @@ function screenController() {
 
     //initial render 
     updateScreen();
+
 
 
 
