@@ -663,16 +663,12 @@ function screenController() {
         console.log('switchProjectsClick event has been added')
 
 
-        ////get activeProject, highlight 
+        ////highlighting activeProject 
         taskBarContents.forEach((taskBarContent) => {
             if (taskBarContent.dataset.projectTitle === activeProjectTitle) {
                 taskBarContent.classList.add('activeProject');
             }
         })
-
-
-
-
     
     
         
@@ -745,6 +741,34 @@ function screenController() {
         
     }
 
+    function openEditTaskForm() {
+        /*
+        1. grab addTaskForm
+        2. activeTask (switchTasksClick?? )
+        open task by taskTitle 
+        activeProject
+        loop through tasks to match taskTitle 
+        3. pre-fill addTaskForm values with selected Task info 
+        4.  if cancel - cancelForm
+            if submit - editTaskFormSubmit 
+        
+
+        */
+
+        const addTaskForm = document.querySelector('#addTaskForm');
+    }
+
+    function editTaskFormSubmit() {
+        /*
+        get activeTask
+
+        1. const taskTitle = document.querySelector('.addTaskFormTitleInput').value;
+        const taskDescription = document.querySelector('.addTaskFormDescriptionInput').value;
+        const taskDueDate = document.querySelector('.addTaskFormDueDateInput').value;
+
+        */
+    }
+
 
     function cancelTaskForm() {
         const addTaskFormInputs = document.querySelectorAll('.addTaskFormInput');
@@ -777,7 +801,6 @@ function screenController() {
         const taskTitle = document.querySelector('.addTaskFormTitleInput').value;
         const taskDescription = document.querySelector('.addTaskFormDescriptionInput').value;
         const taskDueDate = document.querySelector('.addTaskFormDueDateInput').value;
-
         
 
         console.log(`this is priority: ${taskPriority}`);
