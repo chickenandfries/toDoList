@@ -21,20 +21,14 @@ function Board() {
     board.push(Project('upcoming', 2));
  
 
-    // const addProject = () => {
-    // }
-
+  
     const addProject = (title) => {
         board.push(Project(title))
     }
 
-    // const getProject = (projectTitle) => {
-    //     const activeProject = board.filter((project) => project.title === projectTitle);
-    //     return activeProject 
-    // }
 
     const addTask = (projectTitle, ...taskInputs) => {        
-        console.log(`taskInputs`);        
+        console.log(`taskInputs below`);        
         console.log(...taskInputs);
         
 
@@ -154,11 +148,11 @@ function Controller() {
     let activeProject = board.getBoard()[0];
 
 
-    console.log(`this is boardBoard`);
+    console.log(`boardBoard below`);
     console.log(boardBoard);
            
 
-    let activeTask = activeProject.tasks;
+    let activeTask = activeProject.tasks[0];
 
         
     let getActiveProjectTitle = () => activeProject.title; 
