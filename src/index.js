@@ -133,14 +133,14 @@ function Project(title) {
 
 function Task(title, dueDate, priority, description) {
 
-    const priorityList = [
-        'p1',
-        'p2',
-        'p3',
-        'p4'
-    ]
+    // const priorityList = [
+    //     'p1',
+    //     'p2',
+    //     'p3',
+    //     'p4'
+    // ]
 
-    let selectedPriority = priorityList[priority-1];
+    // let selectedPriority = priorityList[priority-1];
 
     // setTimeout(() => {
     //     console.log(`this is selectedPriority = ${selectedPriority}`);
@@ -149,7 +149,7 @@ function Task(title, dueDate, priority, description) {
     
 
 
-    const getPriority = () => selectedPriority;
+    const getPriority = () => priority;
 
   
 
@@ -157,6 +157,7 @@ function Task(title, dueDate, priority, description) {
         title: title,
         dueDate: dueDate,
         description: description,
+        priority: priority,
         getPriority,
     }
 
@@ -187,8 +188,8 @@ function Controller() {
     let getActiveProjectTasks = () => activeProject.tasks;
 
 
-    board.addTask(getActiveProjectTitle(), 'asfed','06/05/25', '1', 'this is an example of task description');
-    board.addTask(getActiveProjectTitle(), 'a','b','4','e');
+    board.addTask(getActiveProjectTitle(), 'asfed','06/05/25', 'p1', 'this is an example of task description');
+    board.addTask(getActiveProjectTitle(), 'a','b','p4','e');
 
     
 
@@ -201,7 +202,11 @@ function Controller() {
 
     const getActiveTask = () => activeTask;
 
-    const getActiveTaskTitle = () => activeTask.title
+    const getActiveTaskTitle = () => activeTask.title;
+
+    const getActiveTaskPriority =() => activeTask.priority;
+
+    
 
     // console.log(board.getPriority(getActiveProjectTitle(), getActiveTask()));
 
@@ -261,6 +266,7 @@ function Controller() {
         addProject,
         switchActiveTask,
         getActiveTaskTitle,
+        getActiveTaskPriority,
     }
      
 }
@@ -454,24 +460,25 @@ function screenController() {
             // checkMarkImgPNG.style.backgroundColor = 'red';
 
             
-            if (projectTask.getPriority() === 'p1') {
-
-                
-                checkMarkImgPNG.style.backgroundColor ='red';
-            }   else if (projectTask.selectedPriority === 'p2') {
-                checkMarkImgPNG.style.backgroundColor ='orange';
-            }   else if (projectTask.selectedPriority === 'p3') {
-                checkMarkImgPNG.style.backgroundColor ='skyblue';
-            }   else if (projectTask.selectedPriority === 'p4') {
-                checkMarkImgPNG.style.backgroundColor ='none';
-            }
-
+            
+            
 
             task.appendChild(checkMarkImgPNG);
 
             const taskTitle = document.createElement('h3');
             taskTitle.classList.add('taskTitle');
             taskTitle.textContent = projectTask.title;
+            
+            if (projectTask.getPriority() === 'p1') {
+                taskTitle.style.backgroundColor ='red';
+            }   else if (projectTask.getPriority() === 'p2') {
+                taskTitle.style.backgroundColor ='orange';
+            }   else if (projectTask.getPriority() === 'p3') {
+                taskTitle.style.backgroundColor ='skyblue';
+            }   else if (projectTask.getPriority() === 'p4') {
+                taskTitle.style.backgroundColor ='white';
+            }
+                
             task.appendChild(taskTitle);
 
             const taskDueDate = document.createElement('div');
@@ -681,8 +688,9 @@ function screenController() {
         for (let i=1; i<5; i++) {
             const flagImgPNG = new Image();
             flagImgPNG.src = flagImg;
+            flagImgPNG.classList.add('flagImgPNG');
             flagImgPNG.classList.add(`flagImgPNG${i}`);
-            flagImgPNG.dataset.priority = i;
+            flagImgPNG.dataset.priority = `p${i}`;
             flagImgPNG.addEventListener('click', selectPriorityClick);
             addTaskFormUserPriorityFlags.appendChild(flagImgPNG);
         }
@@ -819,6 +827,10 @@ function screenController() {
         const addTaskForm = document.querySelector('#addTaskForm');
         addTaskForm.style.display = 'none';
 
+        removePriorityFlagStyle();
+
+
+
     }
 
 
@@ -831,6 +843,14 @@ function screenController() {
         if (!selectedTaskPriority) return
 
         taskPriority = selectedTaskPriority;
+
+
+        removePriorityFlagStyle();
+
+        ////add activePriority class 
+        e.target.classList.add('activePriority')
+
+        
                     
     }
 
@@ -917,7 +937,36 @@ function screenController() {
         // console.log(toDoList.getActiveTask().selectedPriority);
         // console.log(toDoList.activeTask.dueDate);
         // console.log(toDoList.activeTask.title);
+
+
+        removePriorityFlagStyle();
+
+        recallPriorityFlagStyle();
+
         
+    }
+
+    function removePriorityFlagStyle() {
+        ////activePriority flag 
+        const flagImgPNGs = document.querySelectorAll('.flagImgPNG');
+
+        flagImgPNGs.forEach((flagImgPNG) => {
+            flagImgPNG.classList.remove('activePriority')
+        })
+
+    };
+
+    function recallPriorityFlagStyle() {
+        const flagImgPNGs = document.querySelectorAll('.flagImgPNG');
+
+        flagImgPNGs.forEach((flagImgPNG) => {
+            if (flagImgPNG.dataset.priority === toDoList.getActiveTaskPriority()) {
+                
+                
+                flagImgPNG.classList.add('activePriority')
+            }
+            
+        });
 
     }
 

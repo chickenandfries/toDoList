@@ -73,12 +73,12 @@ header h1 {
 }
 
 .taskBarContents:hover{
-    background-color: red;
+    background-color: pink;
 }
 
 
 .activeProject {
-    background-color:red;
+    background-color:pink;
 }
 
 
@@ -104,7 +104,7 @@ header h1 {
 
 .projects h2 {
     margin: 1rem;
-    border: 1px solid red;
+    /* border: 1px solid red; */
 
 
 }
@@ -135,6 +135,11 @@ header h1 {
     grid-template-columns: 50px 3fr 1fr;
     grid-template-rows: 50px 1fr;
     border-bottom: grey solid 1px;
+}
+
+.task:hover {
+    background-color: pink;
+
 }
 
 .checkMarkImgPNG {
@@ -293,6 +298,11 @@ header h1 {
     background-color: skyblue;
 }
 
+.activePriority {
+    width: 2.5rem;
+    height: 2.5rem;
+
+}
 
 /* .addProjectFormUserHeadingHTwo {
     text-align: center;
