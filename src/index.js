@@ -43,6 +43,32 @@ function Board() {
         return board   
     }
 
+    const getPriority = (projectTitle, taskTitle) => {
+        console.log(`getPriority function in Board is running w/ ${projectTitle}, ${taskTitle}`);
+        
+
+        for (let i = 0; i< board.length; i++) {
+            if (board[i].title === projectTitle) {
+                console.log(`found project`);
+                
+                for (let j = 0; j<board[i].tasks.length; j++) {
+                    if (board[i].tasks[j].title ===taskTitle) {
+                        console.log(board[i].tasks[j].getPriority());
+                        return board[i].tasks[j].getPriority();
+                        
+                        
+                    }
+                }
+            }
+        }
+
+        console.log(`this shouldn't be running`);
+        
+        
+        
+    }
+
+
 
 
     // const inputTaskPriority = (projectTitle, taskTitle, priority) => {
@@ -83,7 +109,8 @@ function Board() {
     return {
         getBoard, 
         addProject,
-        addTask
+        addTask,
+        getPriority,
     }
 
 }
@@ -104,7 +131,7 @@ function Project(title) {
 
 
 
-function Task(title, dueDate, priority = 4, description) {
+function Task(title, dueDate, priority, description) {
 
     const priorityList = [
         'p1',
@@ -129,7 +156,6 @@ function Task(title, dueDate, priority = 4, description) {
     return {
         title: title,
         dueDate: dueDate,
-        selectedPriority,
         description: description,
         getPriority,
     }
@@ -152,7 +178,8 @@ function Controller() {
     console.log(boardBoard);
            
 
-    let activeTask = activeProject.tasks[0];
+    
+   
 
         
     let getActiveProjectTitle = () => activeProject.title; 
@@ -163,10 +190,30 @@ function Controller() {
     board.addTask(getActiveProjectTitle(), 'asfed','06/05/25', '1', 'this is an example of task description');
     board.addTask(getActiveProjectTitle(), 'a','b','4','e');
 
+    
 
 
 
-    const switchProjects = (selectedProjectTitle) => {
+    let activeTask = activeProject.tasks[0];
+    
+    console.log(`activeTask below `);
+    console.log(activeTask);
+
+    const getActiveTask = () => activeTask;
+
+    const getActiveTaskTitle = () => activeTask.title
+
+    // console.log(board.getPriority(getActiveProjectTitle(), getActiveTask()));
+
+    board.getPriority(getActiveProjectTitle(), getActiveTaskTitle())
+
+    
+    
+
+
+
+
+    const switchActiveProject = (selectedProjectTitle) => {
         
         for (let i=0; i < boardBoard.length; i++) {
             if (boardBoard[i].title === selectedProjectTitle) {
@@ -178,11 +225,13 @@ function Controller() {
     }
 
 
-    const switchTasks = (selectedTaskTitle) => {
+    const switchActiveTask = (selectedTaskTitle) => {
         for (let i=0; i < getActiveProjectTasks().length; i++) {
             if (getActiveProjectTasks()[i].title === selectedTaskTitle) {
 
                 activeTask = getActiveProjectTasks()[i];
+                console.log(`this is now activeTask = `);
+                console.log(activeTask);          
             }
         }
     }
@@ -205,11 +254,13 @@ function Controller() {
     return {
         addTask,
         getBoard,
+        getActiveTask,
         getActiveProjectTitle,
         getActiveProjectTasks,
-        switchProjects,
+        switchActiveProject,
         addProject,
-        switchTasks
+        switchActiveTask,
+        getActiveTaskTitle,
     }
      
 }
@@ -219,6 +270,8 @@ function Controller() {
 function screenController() {
 
     const toDoList = Controller();
+
+    let taskPriority;  
 
 
     ////selecting
@@ -392,6 +445,7 @@ function screenController() {
             const task = document.createElement('div');
             task.classList.add('task');
             task.dataset.taskTitle = projectTask.title;
+            task.addEventListener('click', taskClick);
             tasks.appendChild(task);
 
             const checkMarkImgPNG = new Image();            
@@ -400,7 +454,7 @@ function screenController() {
             // checkMarkImgPNG.style.backgroundColor = 'red';
 
             
-            if (projectTask.selectedPriority === 'p1') {
+            if (projectTask.getPriority() === 'p1') {
 
                 
                 checkMarkImgPNG.style.backgroundColor ='red';
@@ -568,7 +622,7 @@ function screenController() {
         addTaskFormUserTitleInput.classList.add('addTaskFormInput');
         addTaskFormUserTitleInput.classList.add('addTaskFormTitleInput');
         addTaskFormUserTitleInput.setAttribute('type', 'text');  
-        addTaskFormUserTitleInput.setAttribute('name', 'taskTitle');
+        addTaskFormUserTitleInput.setAttribute('id', 'taskTitle');
         addTaskFormUserLiTitle.appendChild(addTaskFormUserTitleInput);
 
         const addTaskFormUserLiDescription = document.createElement('li');
@@ -584,7 +638,7 @@ function screenController() {
         addTaskFormUserDescriptionInput.classList.add('addTaskFormInput');
         addTaskFormUserDescriptionInput.classList.add('addTaskFormDescriptionInput');
         addTaskFormUserDescriptionInput.setAttribute('type', 'text');  
-        addTaskFormUserDescriptionInput.setAttribute('name', 'taskDescription');
+        addTaskFormUserDescriptionInput.setAttribute('id', 'taskDescription');
         addTaskFormUserLiDescription.appendChild(addTaskFormUserDescriptionInput);
 
         const addTaskFormUserLiDueDate = document.createElement('li');
@@ -600,7 +654,7 @@ function screenController() {
         addTaskFormUserDueDateInput.classList.add('addTaskFormInput');
         addTaskFormUserDueDateInput.classList.add('addTaskFormDueDateInput');
         addTaskFormUserDueDateInput.setAttribute('type', 'text');  
-        addTaskFormUserDueDateInput.setAttribute('name', 'taskDueDate');
+        addTaskFormUserDueDateInput.setAttribute('id', 'taskDueDate');
         addTaskFormUserLiDueDate.appendChild(addTaskFormUserDueDateInput);
 
 
@@ -633,7 +687,7 @@ function screenController() {
             addTaskFormUserPriorityFlags.appendChild(flagImgPNG);
         }
 
-        let priorityInput = 'p4';
+        taskPriority = 'p4'
 
  
   
@@ -649,7 +703,7 @@ function screenController() {
         addTaskFormUserAdd.textContent = 'Add';
         addTaskFormUserButtons.appendChild(addTaskFormUserAdd);
         
-        addTaskFormUserAdd.addEventListener('click', taskFormSubmit);
+        addTaskFormUserAdd.addEventListener('click', submitTaskForm);
 
 
 
@@ -658,9 +712,9 @@ function screenController() {
         ////adding switchProject function to each line item 
         const taskBarContents = document.querySelectorAll('.taskBarContents');
         taskBarContents.forEach((taskBarContent) => {
-            taskBarContent.addEventListener('click', switchProjectsClick)
+            taskBarContent.addEventListener('click', switchActiveProjectClick)
         })
-        console.log('switchProjectsClick event has been added')
+        console.log('switchActiveProjectClick event has been added')
 
 
         ////highlighting activeProject 
@@ -680,8 +734,8 @@ function screenController() {
     // inbox.classList.add('activeProject')
     
 
-    function switchProjectsClick(e) {
-        console.log(`below is switchProjectsClick target`);
+    function switchActiveProjectClick(e) {
+        console.log(`below is switchActiveProject target`);
         console.log(e.target);
         
         ////grab the title from the project that was clicked on 
@@ -689,7 +743,7 @@ function screenController() {
         ////if what was clicked on doesn't have projectTitle, return 
         if (!selectedProjectTitle) return;
 
-        toDoList.switchProjects(selectedProjectTitle);
+        toDoList.switchActiveProject(selectedProjectTitle);
 
         updateScreen();
 
@@ -741,22 +795,7 @@ function screenController() {
         
     }
 
-    function openEditTaskForm() {
-        /*
-        1. grab addTaskForm
-        2. activeTask (switchTasksClick?? )
-        open task by taskTitle 
-        activeProject
-        loop through tasks to match taskTitle 
-        3. pre-fill addTaskForm values with selected Task info 
-        4.  if cancel - cancelForm
-            if submit - editTaskFormSubmit 
-        
-
-        */
-
-        const addTaskForm = document.querySelector('#addTaskForm');
-    }
+    
 
     function editTaskFormSubmit() {
         /*
@@ -783,21 +822,20 @@ function screenController() {
     }
 
 
-    let taskPriority = '4';
-    console.log(toDoList.getActiveProjectTasks());
-    
-    
+    ////taskPriority 
+
     function selectPriorityClick(e) {
-        taskPriority = e.target.dataset.priority;
+        const selectedTaskPriority = e.target.dataset.priority;
         console.log('selectPriorityClick running');
                 
-        if (!taskPriority) return;
+        if (!selectedTaskPriority) return
 
-        
+        taskPriority = selectedTaskPriority;
+                    
     }
 
 
-    function taskFormSubmit() {
+    function submitTaskForm() {
         const taskTitle = document.querySelector('.addTaskFormTitleInput').value;
         const taskDescription = document.querySelector('.addTaskFormDescriptionInput').value;
         const taskDueDate = document.querySelector('.addTaskFormDueDateInput').value;
@@ -812,7 +850,12 @@ function screenController() {
 
     }
 
-    function switchTasksClick(e) {
+    function taskClick(e) {
+        switchActiveTask(e);
+        openEditTaskForm()
+    }
+
+    function switchActiveTask(e) {
         /*
         1. get Active project
         2. for... tasks, 
@@ -820,20 +863,62 @@ function screenController() {
             change active Task 
 
         */
+
+        console.log(`switchActiveTaskClick has run` );
+        
+            
         
 
         ////grab the title from the task that was clicked on 
         const selectedTaskTitle = e.target.dataset.taskTitle;
+        console.log(`clicked ${e.target.dataset.taskTitle}`);
+        
         ////if what was clicked on doesn't have taskTitle, return 
         if (!selectedTaskTitle) return;
 
-        toDoList.switchProjects(selectedTaskTitle);
+        toDoList.switchActiveTask(selectedTaskTitle);
 
-        updateScreen();
-
+        console.log(`this is now activeTask`);
+        console.log(toDoList.getActiveTask());
         
+
+        // updateScreen();
        
       
+    }
+
+    function openEditTaskForm() {
+        /*
+        1. grab addTaskForm
+        2. activeTask (switchTasksClick?? )
+        open task by taskTitle 
+        activeProject
+        loop through tasks to match taskTitle 
+        3. pre-fill addTaskForm values with selected Task info 
+        4.  if cancel - cancelForm
+            if submit - editTaskFormSubmit 
+        
+
+        */
+
+        ////open project form 
+        openTaskForm();
+
+        ////prefill openTaskForm values with info from activeProject
+
+        document.querySelector('#taskTitle').value = toDoList.getActiveTask().title;
+        document.querySelector('#taskDescription').value = toDoList.getActiveTask().description;
+        document.querySelector('#taskDueDate').value = toDoList.getActiveTask().dueDate;
+
+
+        // console.log(toDoList.getActiveTask().title);
+        // console.log(toDoList.getActiveTask().dueDate);
+        // console.log(toDoList.getActiveTask().description);
+        // console.log(toDoList.getActiveTask().selectedPriority);
+        // console.log(toDoList.activeTask.dueDate);
+        // console.log(toDoList.activeTask.title);
+        
+
     }
 
 
