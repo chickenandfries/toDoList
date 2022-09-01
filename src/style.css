@@ -125,7 +125,6 @@ header h1 {
 .tasks {
     display: flex;
     flex-direction: column;
-    /* border: 2px solid black; */
     gap: 1rem;
 
 }

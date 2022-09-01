@@ -19,22 +19,22 @@ function Board() {
     board.push(Project('inbox', 0));
     board.push(Project('today', 1));
     board.push(Project('upcoming', 2));
- 
+
 
   
-    const addProject = (title) => {
-        board.push(Project(title))
+    const addProject = (title, projectIndex) => {
+        board.push(Project(title, projectIndex))
     }
 
 
-    const addTask = (projectTitle, ...taskInputs) => {        
+    const addTask = (projectTitle, taskIndex, ...taskInputs) => {        
         console.log(`taskInputs below`);        
         console.log(...taskInputs);
         
 
         for (let i = 0; i< board.length; i++) {
             if (board[i].title === projectTitle) {
-                board[i].tasks.push(Task(...taskInputs))
+                board[i].tasks.push(Task(taskIndex, ...taskInputs))
             }
         }
 
@@ -66,6 +66,22 @@ function Board() {
         
         
         
+    }
+
+
+    const editTask = (projectIndex, taskIndex, ...taskInputs) => {
+
+        for (let i = 0; i< board.length; i++) {
+            if (board[i].projectIndex === projectIndex) {
+                for (let j=0; board[i].tasks.length; j++) {
+                    if (board[i].tasks[j].taskIndex === taskIndex) {
+                        board[i].tasks.splice(j,0,Task(taskIndex, ...taskInputs))
+                    }
+                }
+            }
+        }
+
+
     }
 
 
@@ -111,27 +127,29 @@ function Board() {
         addProject,
         addTask,
         getPriority,
+        editTask
     }
 
 }
 
 
 
-function Project(title) {
+function Project(title, projectIndex) {
     let tasks = [];
 
     // const addTaskToProject = projects.push(Task(title, description, duedate, priority, description));
 
     return {
         title: title,
-        // projectID: projectID,
-        tasks
+        projectIndex: projectIndex,
+        tasks,
+
     }
 }
 
 
 
-function Task(title, dueDate, priority, description) {
+function Task(taskIndex, title, dueDate, priority, description ) {
 
     // const priorityList = [
     //     'p1',
@@ -158,6 +176,7 @@ function Task(title, dueDate, priority, description) {
         dueDate: dueDate,
         description: description,
         priority: priority,
+        taskIndex: taskIndex,
         getPriority,
     }
 
@@ -177,10 +196,13 @@ function Controller() {
 
     console.log(`boardBoard below`);
     console.log(boardBoard);
-           
 
-    
-   
+    let projectIndex = 3;
+    let taskIndex = 2; 
+
+    const getTaskIndex = () => taskIndex;
+           
+  
 
         
     let getActiveProjectTitle = () => activeProject.title; 
@@ -188,8 +210,8 @@ function Controller() {
     let getActiveProjectTasks = () => activeProject.tasks;
 
 
-    board.addTask(getActiveProjectTitle(), 'asfed','06/05/25', 'p1', 'this is an example of task description');
-    board.addTask(getActiveProjectTitle(), 'a','b','p4','e');
+    board.addTask(getActiveProjectTitle(), 0, 'asfed','06/05/25', 'p1', 'this is an example of task description');
+    board.addTask(getActiveProjectTitle(), 1, 'a','b','p4','e');
 
     
 
@@ -206,13 +228,14 @@ function Controller() {
 
     const getActiveTaskPriority =() => activeTask.priority;
 
+    const getActiveTaskTaskIndex =() => activeTask.taskIndex;
+
     
 
     // console.log(board.getPriority(getActiveProjectTitle(), getActiveTask()));
 
     board.getPriority(getActiveProjectTitle(), getActiveTaskTitle())
 
-    
     
 
 
@@ -243,22 +266,55 @@ function Controller() {
 
 
     const addTask = (title, dueDate, priority, description) => {
-        board.addTask(getActiveProjectTitle(), title, dueDate, priority, description)
+        board.addTask(getActiveProjectTitle(), taskIndex, title, dueDate, priority, description);
+        
+        taskIndex++;
         
     };
+        // let activeProjectTasks = getACtiveProjectTasks();
+        // for (let i=0; i < activeProjectTasks.length; i++) {
+        //     if (activeProjectTasks[i].taskIndex === taskIndex) {
+        //         activeProjectTasks.splice(i, 0, )
+
+        //     }
+        // }
+        
+    const editTask = (taskIndex, title, dueDate, priority, description ) => {
+        // let activeProjectTasks = getACtiveProjectTasks();
+        // for (let i=0; i < activeProjectTasks.length; i++) {
+        //     if (activeProjectTasks[i].taskIndex === taskIndex) {
+        //         activeProjectTasks.splice(i, 0, )
+
+        //     }
+        // }
+        board.editTask(activeProject.projectIndex, taskIndex, title, dueDate, priority, description)
 
 
-    const addProject = (projectTitle) => {
-        board.addProject(projectTitle)
+        
     }
 
 
-    const getBoard = () => boardBoard
+    const addProject = (projectTitle) => {
+        board.addProject(projectTitle, projectIndex);
+        projectIndex++;
+
+    }
+
+
+    const getBoard = () => boardBoard;
+
+    const checkTaskExist = () => {
+        
+    }
+
+    const getActiveProject =() => activeProject; 
 
 
     return {
         addTask,
         getBoard,
+        getTaskIndex,
+        getActiveProject,
         getActiveTask,
         getActiveProjectTitle,
         getActiveProjectTasks,
@@ -267,6 +323,7 @@ function Controller() {
         switchActiveTask,
         getActiveTaskTitle,
         getActiveTaskPriority,
+        getActiveTaskTaskIndex,
     }
      
 }
@@ -278,6 +335,7 @@ function screenController() {
     const toDoList = Controller();
 
     let taskPriority;  
+    let activeTask = toDoList.getActiveTask();
 
 
     ////selecting
@@ -662,6 +720,9 @@ function screenController() {
         addTaskFormUserDueDateInput.classList.add('addTaskFormDueDateInput');
         addTaskFormUserDueDateInput.setAttribute('type', 'text');  
         addTaskFormUserDueDateInput.setAttribute('id', 'taskDueDate');
+        if (activeProjectTitle === 'today') {
+            addTaskFormUserDueDateInput.value = new Date();
+        }
         addTaskFormUserLiDueDate.appendChild(addTaskFormUserDueDateInput);
 
 
@@ -708,7 +769,7 @@ function screenController() {
                 
         
         const addTaskFormUserAdd = document.createElement('button');
-        addTaskFormUserAdd.textContent = 'Add';
+        addTaskFormUserAdd.textContent = 'Submit';
         addTaskFormUserButtons.appendChild(addTaskFormUserAdd);
         
         addTaskFormUserAdd.addEventListener('click', submitTaskForm);
@@ -829,6 +890,8 @@ function screenController() {
 
         removePriorityFlagStyle();
 
+        activeTask = toDoList.getActiveProjectTasks()[0];
+
 
 
     }
@@ -856,12 +919,29 @@ function screenController() {
 
 
     function submitTaskForm() {
+        /*
+        if activeProject.taskIndex === taskIndex 
+            edit submit
+        else if activeProject.taskIndex !== taskIndex
+            addTask submit 
+        */
+        
+
+        ////if selectedTask's taskIndex does not equal the Controller task Index, i.e. user has just clicked on an existing task 
+        if (toDoList.getActiveTaskTaskIndex() != toDoList.getTaskIndex()) {
+            console.log(`buttbutt`);
+            
+
+            
+        }
+
         const taskTitle = document.querySelector('.addTaskFormTitleInput').value;
         const taskDescription = document.querySelector('.addTaskFormDescriptionInput').value;
         const taskDueDate = document.querySelector('.addTaskFormDueDateInput').value;
         
 
         console.log(`this is priority: ${taskPriority}`);
+       
         toDoList.addTask(taskTitle, taskDueDate, taskPriority, taskDescription)
         
         cancelTaskForm();
@@ -906,6 +986,7 @@ function screenController() {
        
       
     }
+
 
     function openEditTaskForm() {
         /*
