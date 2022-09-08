@@ -27,13 +27,13 @@ function Board() {
     }
 
 
-    const addTask = (projectTitle, taskIndex, ...taskInputs) => {        
+    const addTask = (projectIndex, taskIndex, ...taskInputs) => {        
         console.log(`taskInputs below`);        
         console.log(...taskInputs);
         
 
         for (let i = 0; i< board.length; i++) {
-            if (board[i].title === projectTitle) {
+            if (board[i].projectIndex === projectIndex) {
                 board[i].tasks.push(Task(taskIndex, ...taskInputs))
             }
         }
@@ -189,7 +189,6 @@ function Task(taskIndex, title, dueDate, priority, description ) {
 function Controller() {
     ////initial set up
     let board = Board();
-
     let boardBoard = board.getBoard();
     let activeProject = board.getBoard()[0];
 
@@ -209,9 +208,14 @@ function Controller() {
 
     let getActiveProjectTasks = () => activeProject.tasks;
 
+    let getActiveProjectIndex = () => activeProject.projectIndex; 
+    console.log(getActiveProjectIndex());
 
-    board.addTask(getActiveProjectTitle(), 0, 'asfed','06/05/25', 'p1', 'this is an example of task description');
-    board.addTask(getActiveProjectTitle(), 1, 'a','b','p4','e');
+    
+
+
+    board.addTask(getActiveProjectIndex(), 0, 'asfed','06/05/25', 'p1', 'this is an example of task description');
+    board.addTask(getActiveProjectIndex(), 1, 'a','b','p4','e');
 
     
 
@@ -241,12 +245,17 @@ function Controller() {
 
 
 
-    const switchActiveProject = (selectedProjectTitle) => {
+    const switchActiveProject = (selectedProjectIndex) => {
+        console.log(`switchActiveProject is running`);
         
         for (let i=0; i < boardBoard.length; i++) {
-            if (boardBoard[i].title === selectedProjectTitle) {
+            if (boardBoard[i].projectIndex === selectedProjectIndex) {
+                console.log(`found project`);
+                
        
                 activeProject = boardBoard[i];
+                console.log(activeProject);
+                
             }
         }
 
@@ -379,6 +388,7 @@ function screenController() {
         inbox.classList.add('taskBarContents');
         // inbox.classList.add('activeProject');
         inbox.dataset.projectTitle = 'inbox';
+        inbox.dataset.projectIndex = 0;
     
         taskBarTop.appendChild(inbox);
     
@@ -396,6 +406,7 @@ function screenController() {
         const today = document.createElement('div');
         today.classList.add('taskBarContents');
         today.dataset.projectTitle = 'today';
+        today.dataset.projectIndex = 1;
         taskBarTop.appendChild(today);
     
         const todayImgPNG = new Image();
@@ -412,6 +423,7 @@ function screenController() {
         const upcoming = document.createElement('div');
         upcoming.classList.add('taskBarContents');
         upcoming.dataset.projectTitle = 'upcoming';
+        upcoming.dataset.projectIndex = 2;
         taskBarTop.appendChild(upcoming);
     
     
@@ -447,6 +459,9 @@ function screenController() {
 
             ////user input title needed here.... use title to switch between tasks 
             projectsNavProject.dataset.projectTitle = `${board[i].title}`
+
+            ////update: use projectIndex to switch between tasks 
+            projectsNavProject.dataset.projectIndex = i;
          
             // ////projectTargetID is what will be used to switch between taskView 
             // projectsNavProject.dataset.projectTargetID = `${i}`;
@@ -808,11 +823,13 @@ function screenController() {
         console.log(e.target);
         
         ////grab the title from the project that was clicked on 
-        const selectedProjectTitle = e.target.dataset.projectTitle;
+        const selectedProjectIndex = e.target.dataset.projectIndex;
+        console.log(`this is selectedProjectIndex:${selectedProjectIndex} `);
+        
         ////if what was clicked on doesn't have projectTitle, return 
-        if (!selectedProjectTitle) return;
+        if (!selectedProjectIndex) return;
 
-        toDoList.switchActiveProject(selectedProjectTitle);
+        toDoList.switchActiveProject(Number(selectedProjectIndex));
 
         updateScreen();
 
