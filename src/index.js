@@ -872,9 +872,23 @@ function screenController() {
     }
 
 
+
     function openTaskForm() {
         const addTaskForm = document.querySelector('#addTaskForm');
         addTaskForm.style.display = 'block';
+
+        console.log(`active Task task index below`);
+        console.log(toDoList.getActiveTaskTaskIndex());
+        
+        
+        // console.log(typeof(toDoList.getActiveTaskTaskIndex()));
+        // console.log(typeof(toDoList.getTaskIndex()));
+        // console.log(toDoList.getActiveTaskTaskIndex());
+        // console.log(toDoList.getTaskIndex());
+
+        // if (toDoList.getActiveTaskTaskIndex() !== toDoList.getTaskIndex()) {
+        //     console.log(`buttbutt`);
+        // }
         
     }
 
@@ -937,15 +951,27 @@ function screenController() {
         else if activeProject.taskIndex !== taskIndex
             addTask submit 
         */
-        
+
 
         ////if selectedTask's taskIndex does not equal the Controller task Index, i.e. user has just clicked on an existing task 
-        if (toDoList.getActiveTaskTaskIndex() != toDoList.getTaskIndex()) {
+        if (toDoList.getActiveTaskTaskIndex() !== toDoList.getTaskIndex()) {
             console.log(`buttbutt`);
+
+            /*
+            input: 
+            getActiveTaskTaskTitle = .value
+            
+
+            */
+            
+
             
 
             
         }
+               
+        
+
 
         const taskTitle = document.querySelector('.addTaskFormTitleInput').value;
         const taskDescription = document.querySelector('.addTaskFormDescriptionInput').value;
@@ -977,7 +1003,7 @@ function screenController() {
 
         */
 
-        console.log(`switchActiveTaskClick has run` );     
+        console.log(`switchActiveTaskClick has run`);     
         
 
         ////grab the Index from the task that was clicked on 
@@ -992,7 +1018,6 @@ function screenController() {
         console.log(`this is now activeTask`);
         console.log(toDoList.getActiveTask());
         
-
         // updateScreen();
        
       
@@ -1000,6 +1025,7 @@ function screenController() {
 
 
     function openEditTaskForm() {
+
         /*
         1. grab addTaskForm
         2. activeTask (switchTasksClick?? )
@@ -1031,6 +1057,7 @@ function screenController() {
         // console.log(toDoList.activeTask.title);
 
 
+        ////what do these do? lol 
         removePriorityFlagStyle();
 
         recallPriorityFlagStyle();
