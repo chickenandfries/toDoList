@@ -43,30 +43,31 @@ function Board() {
         return board   
     }
 
-    const getPriority = (projectTitle, taskTitle) => {
-        console.log(`getPriority function in Board is running w/ ${projectTitle}, ${taskTitle}`);
+    //////don't need this... Controller can access Task directly.. 
+    // const getPriority = (projectTitle, taskTitle) => {
+    //     console.log(`getPriority function in Board is running w/ ${projectTitle}, ${taskTitle}`);
         
 
-        for (let i = 0; i< board.length; i++) {
-            if (board[i].title === projectTitle) {
-                console.log(`found project`);
+    //     for (let i = 0; i< board.length; i++) {
+    //         if (board[i].title === projectTitle) {
+    //             console.log(`found project`);
                 
-                for (let j = 0; j<board[i].tasks.length; j++) {
-                    if (board[i].tasks[j].title ===taskTitle) {
-                        console.log(board[i].tasks[j].getPriority());
-                        return board[i].tasks[j].getPriority();
+    //             for (let j = 0; j<board[i].tasks.length; j++) {
+    //                 if (board[i].tasks[j].title ===taskTitle) {
+    //                     console.log(board[i].tasks[j].getPriority());
+    //                     return board[i].tasks[j].getPriority();
                         
                         
-                    }
-                }
-            }
-        }
+    //                 }
+    //             }
+    //         }
+    //     }
 
-        console.log(`this shouldn't be running`);
+    //     console.log(`this shouldn't be running`);
         
         
         
-    }
+    // }
 
 
     const editTask = (projectIndex, taskIndex, ...taskInputs) => {
@@ -126,7 +127,7 @@ function Board() {
         getBoard, 
         addProject,
         addTask,
-        getPriority,
+        // getPriority,
         editTask
     }
 
@@ -149,7 +150,7 @@ function Project(title, projectIndex) {
 
 
 
-function Task(taskIndex, title, dueDate, priority, description ) {
+function Task(taskIndex, title, dueDate, priority, description) {
 
     // const priorityList = [
     //     'p1',
@@ -196,9 +197,10 @@ function Controller() {
     console.log(`boardBoard below`);
     console.log(boardBoard);
 
+    ////projectIndex counter
     let projectIndex = 3;
+    ////taskIndex counter
     let taskIndex = 2; 
-
     const getTaskIndex = () => taskIndex;
            
   
@@ -238,7 +240,7 @@ function Controller() {
 
     // console.log(board.getPriority(getActiveProjectTitle(), getActiveTask()));
 
-    board.getPriority(getActiveProjectTitle(), getActiveTaskTitle())
+    // board.getPriority(getActiveProjectTitle(), getActiveTaskTitle())
 
     
 
@@ -262,9 +264,9 @@ function Controller() {
     }
 
 
-    const switchActiveTask = (selectedTaskTitle) => {
+    const switchActiveTask = (selectedTaskIndex) => {
         for (let i=0; i < getActiveProjectTasks().length; i++) {
-            if (getActiveProjectTasks()[i].title === selectedTaskTitle) {
+            if (getActiveProjectTasks()[i].taskIndex === selectedTaskIndex) {
 
                 activeTask = getActiveProjectTasks()[i];
                 console.log(`this is now activeTask = `);
@@ -275,7 +277,7 @@ function Controller() {
 
 
     const addTask = (title, dueDate, priority, description) => {
-        board.addTask(getActiveProjectTitle(), taskIndex, title, dueDate, priority, description);
+        board.addTask(getActiveProjectIndex(), taskIndex, title, dueDate, priority, description);
         
         taskIndex++;
         
@@ -516,14 +518,13 @@ function screenController() {
         taskView.appendChild(tasks);
 
         
-
         ////create tasks list 
         toDoList.getActiveProjectTasks().forEach((projectTask) => {
 
             ////create task 
             const task = document.createElement('div');
             task.classList.add('task');
-            task.dataset.taskTitle = projectTask.title;
+            task.dataset.taskIndex = projectTask.taskIndex;
             task.addEventListener('click', taskClick);
             tasks.appendChild(task);
 
@@ -531,10 +532,6 @@ function screenController() {
             checkMarkImgPNG.src = checkMarkImg;
             checkMarkImgPNG.classList.add('checkMarkImgPNG');
             // checkMarkImgPNG.style.backgroundColor = 'red';
-
-            
-            
-            
 
             task.appendChild(checkMarkImgPNG);
 
@@ -930,8 +927,6 @@ function screenController() {
         ////add activePriority class 
         e.target.classList.add('activePriority')
 
-        
-                    
     }
 
 
@@ -972,28 +967,27 @@ function screenController() {
         openEditTaskForm()
     }
 
+
     function switchActiveTask(e) {
         /*
         1. get Active project
         2. for... tasks, 
-            if task.title === selectedTaskTitle
+            if task.Index === selectedTaskIndex;
             change active Task 
 
         */
 
-        console.log(`switchActiveTaskClick has run` );
-        
-            
+        console.log(`switchActiveTaskClick has run` );     
         
 
-        ////grab the title from the task that was clicked on 
-        const selectedTaskTitle = e.target.dataset.taskTitle;
-        console.log(`clicked ${e.target.dataset.taskTitle}`);
+        ////grab the Index from the task that was clicked on 
+        const selectedTaskIndex = e.target.dataset.taskIndex;
+        console.log(`clicked ${e.target.dataset.taskIndex}`);
         
         ////if what was clicked on doesn't have taskTitle, return 
-        if (!selectedTaskTitle) return;
+        if (!selectedTaskIndex) return;
 
-        toDoList.switchActiveTask(selectedTaskTitle);
+        toDoList.switchActiveTask(Number(selectedTaskIndex));
 
         console.log(`this is now activeTask`);
         console.log(toDoList.getActiveTask());
