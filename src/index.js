@@ -70,7 +70,7 @@ function Board() {
     // }
 
 
-    const editTask = (projectIndex, taskIndex, ...taskInputs) => {
+    const editTaskInputs = (projectIndex, taskIndex, ...taskInputs) => {
 
         for (let i = 0; i< board.length; i++) {
             if (board[i].projectIndex === projectIndex) {
@@ -128,7 +128,7 @@ function Board() {
         addProject,
         addTask,
         // getPriority,
-        editTask
+        editTaskInputs,
     }
 
 }
@@ -216,14 +216,14 @@ function Controller() {
     
 
 
-    board.addTask(getActiveProjectIndex(), 0, 'asfed','06/05/25', 'p1', 'this is an example of task description');
+    board.addTask(getActiveProjectIndex(), 0, 'asfed','06/05/25', 'p1', 'This is a task in your inbox. you can ');
     board.addTask(getActiveProjectIndex(), 1, 'a','b','p4','e');
 
     
 
 
 
-    let activeTask = activeProject.tasks[0];
+    let activeTask = "";
     
     console.log(`activeTask below `);
     console.log(activeTask);
@@ -320,6 +320,21 @@ function Controller() {
 
     const getActiveProject =() => activeProject; 
 
+    const editTaskInputs = (taskTitle, taskDescription, taskDueDate)=> {
+        console.log(`editTaskInputsis now running`);
+
+        board.editTaskInputs()
+        
+      
+
+        console.log(`thisis active Task now`);
+        console.log(activeTask);
+        
+        
+
+        activeTask = '';
+    }
+
 
     return {
         addTask,
@@ -335,6 +350,7 @@ function Controller() {
         getActiveTaskTitle,
         getActiveTaskPriority,
         getActiveTaskTaskIndex,
+        editTaskInputs,
     }
      
 }
@@ -351,6 +367,7 @@ function screenController() {
 
     ////selecting
     const body = document.querySelector('body')  
+
 
 
     const updateScreen = () => {
@@ -879,6 +896,12 @@ function screenController() {
 
         console.log(`active Task task index below`);
         console.log(toDoList.getActiveTaskTaskIndex());
+
+        
+        console.log(!toDoList.getActiveTask());
+
+        
+        
         
         
         // console.log(typeof(toDoList.getActiveTaskTaskIndex()));
@@ -918,7 +941,7 @@ function screenController() {
 
         removePriorityFlagStyle();
 
-        activeTask = toDoList.getActiveProjectTasks()[0];
+        activeTask = "";
 
 
 
@@ -946,45 +969,43 @@ function screenController() {
 
     function submitTaskForm() {
         /*
-        if activeProject.taskIndex === taskIndex 
-            edit submit
-        else if activeProject.taskIndex !== taskIndex
-            addTask submit 
+        if there is an activeTask
+            edit activeTask
+
+        if no activeTask (creating new task)
+            push to end of activeProject.tasks 
         */
-
-
-        ////if selectedTask's taskIndex does not equal the Controller task Index, i.e. user has just clicked on an existing task 
-        if (toDoList.getActiveTaskTaskIndex() !== toDoList.getTaskIndex()) {
-            console.log(`buttbutt`);
-
-            /*
-            input: 
-            getActiveTaskTaskTitle = .value
-            
-
-            */
-            
-
-            
-
-            
-        }
-               
         
 
-
-        const taskTitle = document.querySelector('.addTaskFormTitleInput').value;
-        const taskDescription = document.querySelector('.addTaskFormDescriptionInput').value;
-        const taskDueDate = document.querySelector('.addTaskFormDueDateInput').value;
+        let taskTitle = document.querySelector('.addTaskFormTitleInput').value;
+        let taskDescription = document.querySelector('.addTaskFormDescriptionInput').value;
+        let taskDueDate = document.querySelector('.addTaskFormDueDateInput').value;
         
-
-        console.log(`this is priority: ${taskPriority}`);
-       
-        toDoList.addTask(taskTitle, taskDueDate, taskPriority, taskDescription)
         
-        cancelTaskForm();
-        updateScreen();
+        if (!toDoList.getActiveTask()) {
+            console.log(`new Task being created! not existing task `);
+            
+            console.log(`this is priority: ${taskPriority}`);
+           
+            toDoList.addTask(taskTitle, taskDueDate, taskPriority, taskDescription)
+            
+            cancelTaskForm();
+            updateScreen();
+            return 
+        }   else if (toDoList.getActiveTask()) {
+            console.log(`existing task has been clicked`);
 
+            // taskTitle = document.querySelector('.addTaskFormTitleInput').value;
+            // taskDescription = document.querySelector('.addTaskFormDescriptionInput').value;
+            // taskDueDate = document.querySelector('.addTaskFormDueDateInput').value;
+
+            toDoList.editTaskInputs(taskTitle, taskDescription, taskDueDate);
+            cancelTaskForm();
+            updateScreen();
+
+            return 
+            
+        }    
 
     }
 
@@ -1047,6 +1068,11 @@ function screenController() {
         document.querySelector('#taskTitle').value = toDoList.getActiveTask().title;
         document.querySelector('#taskDescription').value = toDoList.getActiveTask().description;
         document.querySelector('#taskDueDate').value = toDoList.getActiveTask().dueDate;
+
+        console.log(`is there activeTask here?`);
+        console.log(activeTask);
+        
+        
 
 
         // console.log(toDoList.getActiveTask().title);
