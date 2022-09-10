@@ -74,9 +74,17 @@ function Board() {
 
         for (let i = 0; i< board.length; i++) {
             if (board[i].projectIndex === projectIndex) {
-                for (let j=0; board[i].tasks.length; j++) {
+                console.log(`found matching project`);
+                
+                for (let j=0; j < board[i].tasks.length; j++) {
+                    console.log(board[i].tasks[j]);
+                    console.log(board[i].tasks[j].taskIndex)
+
                     if (board[i].tasks[j].taskIndex === taskIndex) {
-                        board[i].tasks.splice(j,0,Task(taskIndex, ...taskInputs))
+                        console.log(`found matching task!! line 79`);
+                        
+                        board[i].tasks.splice(j,1,Task(taskIndex, ...taskInputs))
+                        return 
                     }
                 }
             }
@@ -290,19 +298,6 @@ function Controller() {
         //     }
         // }
         
-    const editTask = (taskIndex, title, dueDate, priority, description ) => {
-        // let activeProjectTasks = getACtiveProjectTasks();
-        // for (let i=0; i < activeProjectTasks.length; i++) {
-        //     if (activeProjectTasks[i].taskIndex === taskIndex) {
-        //         activeProjectTasks.splice(i, 0, )
-
-        //     }
-        // }
-        board.editTask(activeProject.projectIndex, taskIndex, title, dueDate, priority, description)
-
-
-        
-    }
 
 
     const addProject = (projectTitle) => {
@@ -320,10 +315,10 @@ function Controller() {
 
     const getActiveProject =() => activeProject; 
 
-    const editTaskInputs = (taskTitle, taskDescription, taskDueDate)=> {
+    const editTaskInputs = (taskTitle, taskDueDate, taskPriority, taskDescription)=> {
         console.log(`editTaskInputsis now running`);
 
-        board.editTaskInputs()
+        board.editTaskInputs(getActiveProjectIndex(), getActiveTaskTaskIndex(), taskTitle, taskDueDate, taskPriority, taskDescription)
         
       
 
@@ -999,7 +994,7 @@ function screenController() {
             // taskDescription = document.querySelector('.addTaskFormDescriptionInput').value;
             // taskDueDate = document.querySelector('.addTaskFormDueDateInput').value;
 
-            toDoList.editTaskInputs(taskTitle, taskDescription, taskDueDate);
+            toDoList.editTaskInputs(taskTitle, taskDueDate, taskPriority, taskDescription);
             cancelTaskForm();
             updateScreen();
 
