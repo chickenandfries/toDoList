@@ -315,6 +315,7 @@ function Controller() {
 
     const getActiveProject =() => activeProject; 
 
+
     const editTaskInputs = (taskTitle, taskDueDate, taskPriority, taskDescription)=> {
         console.log(`editTaskInputsis now running`);
 
@@ -1063,6 +1064,10 @@ function screenController() {
         document.querySelector('#taskTitle').value = toDoList.getActiveTask().title;
         document.querySelector('#taskDescription').value = toDoList.getActiveTask().description;
         document.querySelector('#taskDueDate').value = toDoList.getActiveTask().dueDate;
+        taskPriority = toDoList.getActiveTaskPriority();
+
+
+        
 
         console.log(`is there activeTask here?`);
         console.log(activeTask);
