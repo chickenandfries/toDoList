@@ -68,8 +68,11 @@ header h1 {
     padding: 0.3rem;
     gap: 0.5rem;
     margin: 0.5rem;
-   
+}
 
+.taskBarContents > * {
+    pointer-events: none;
+    
 }
 
 .taskBarContents:hover{
@@ -97,9 +100,11 @@ header h1 {
     border: 2px solid black;
     padding: 0.3rem;
     gap: 0.5rem;
-    margin: 0.5rem;
-   
+    margin: 0.5rem;   
 
+}
+.projectsContent > * {
+    pointer-events: none;
 }
 
 .projects h2 {
@@ -131,44 +136,63 @@ header h1 {
 
 .task {
     display: grid;
-    grid-template-columns: 50px 3fr 1fr;
+    grid-template-columns: 50px 1fr;
+    border: 2px solid black;
+}
+
+
+.taskComplete {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    background-color: yellow;
+    border: 2px solid red;
+}
+
+.taskContent {
+    grid-column-start: 2;
+    grid-column-end: 3;
+
+    display: grid;
+    grid-template-columns:  3fr 1fr;
     grid-template-rows: 50px 1fr;
     border-bottom: grey solid 1px;
 }
+
+
 
 .task:hover {
     background-color: pink;
 
 }
 
-.checkMarkImgPNG {
+
+
+.taskTitle {
     grid-column-start: 1;
     grid-column-end: 2;
     grid-row-start: 1;
     grid-row-end: 2;
-}
-
-.taskTitle {
-    grid-column-start: 2;
-    grid-column-end: 3;
-    grid-row-start: 1;
-    grid-row-end: 2;
+    pointer-events: none;
 
 }
 
 .taskDueDate {
-    grid-column-start: 3;
-    grid-column-end: 4;
+    grid-column-start: 2;
+    grid-column-end: 3;
     grid-row-start: 1;
     grid-row-end: 2;
+    pointer-events: none;
 
 }
 
 .taskDescription {
     grid-column-start: 1;
-    grid-column-end: 4;
+    grid-column-end: 3;
     grid-row-start: 2;
     grid-row-end: 3;
+    pointer-events: none;
 }
 
 

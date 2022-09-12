@@ -7,6 +7,7 @@ import upcomingImg from './img/upcoming.png';
 import addProjectImg from './img/addProject.png';
 import checkMarkImg from './img/checkMark.png';
 import flagImg from './img/flag.png';
+import editImg from './img/edit.png';
 
 
 
@@ -364,6 +365,7 @@ function Controller() {
         getActiveTask,
         getActiveProjectTitle,
         getActiveProjectTasks,
+        getActiveProjectIndex,
         switchActiveProject,
         addProject,
         switchActiveTask,
@@ -404,6 +406,9 @@ function screenController() {
 
         let activeProjectTitle = toDoList.getActiveProjectTitle();
         console.log(`this is activeProjectTitle: ${activeProjectTitle}`);
+
+        let activeProjectIndex = toDoList.getActiveProjectIndex();
+
            
     
         ////create header
@@ -495,32 +500,44 @@ function screenController() {
 
         ////create DOM elements for projects 
         for (let i=3; i < board.length; i++) {
-  
+
             const projectsNavProject = document.createElement('div');
-            projectsNavProject.classList.add('taskBarContents');
-
-            projectsNavProject.dataset.projectTitle = `${board[i].title}`
-
-            ////update: use projectIndex to switch between projects
-            projectsNavProject.dataset.projectIndex = i;
-
-
-            console.log(`right before openEditprojectForm`);            
-            projectsNavProject.addEventListener('click', openEditProjectForm)
-            projectsNavProject.addEventListener('click', console.log('project has been clicked!!'));
-
-         
-
+            projectsNavProject.classList.add('projectsNavProject');
             projectsNav.appendChild(projectsNavProject);
 
+  
+            const projectsNavProjectContent = document.createElement('div');
+            projectsNavProjectContent.classList.add('taskBarContents');
+
+            projectsNavProjectContent.dataset.projectTitle = `${board[i].title}`
+
+            ////update: use projectIndex to switch between projects
+            projectsNavProjectContent.dataset.projectIndex = i;
+
+
+            console.log(`right before openEditProjectForm`);            
+            projectsNavProjectContent.addEventListener('click', openEditProjectForm)
+            projectsNavProjectContent.addEventListener('click', console.log('project has been clicked!!'));
+
+
+            projectsNavProject.appendChild(projectsNavProjectContent);
 
             const projectNavProjectHThree = document.createElement('h3');
             projectNavProjectHThree.textContent = `${board[i].title}`;
-            projectsNavProject.appendChild(projectNavProjectHThree);
-         
-          
-            
+            projectsNavProjectContent.appendChild(projectNavProjectHThree);
+
+            const projectsNavProjectEdit = document.createElement('div');
+            projectsNavProject.appendChild(projectsNavProjectEdit);
+            const editProjectImg = new Image();
+            editProjectImg.src = editImg;
+            projectsNavProjectEdit.appendChild(editProjectImg);
+
         }
+
+        const upcomingImgPNG = new Image();
+        upcomingImgPNG.src = upcomingImg;
+        upcomingImgPNG.classList.add('upcomingImgPNG');
+        upcoming.appendChild(upcomingImgPNG);
         
     
         const addProject = document.createElement('div');
@@ -562,19 +579,32 @@ function screenController() {
         ////create tasks list 
         toDoList.getActiveProjectTasks().forEach((projectTask) => {
 
-            ////create task 
+            ////create task group line
             const task = document.createElement('div');
-            task.classList.add('task');
-            task.dataset.taskIndex = projectTask.taskIndex;
-            task.addEventListener('click', taskClick);
+            task.classList.add('task')
             tasks.appendChild(task);
+            
+
+            ////div for task complete check 
+            const taskComplete = document.createElement('div');
+            taskComplete.classList.add('taskComplete')
+            task.appendChild(taskComplete);
 
             const checkMarkImgPNG = new Image();            
             checkMarkImgPNG.src = checkMarkImg;
             checkMarkImgPNG.classList.add('checkMarkImgPNG');
             // checkMarkImgPNG.style.backgroundColor = 'red';
+            taskComplete.appendChild(checkMarkImgPNG);
 
-            task.appendChild(checkMarkImgPNG);
+
+            ////create task 
+            const taskContent = document.createElement('div');
+            taskContent.classList.add('taskContent');
+            taskContent.dataset.taskIndex = projectTask.taskIndex;
+            taskContent.addEventListener('click', taskClick);
+            task.appendChild(taskContent);
+
+            
 
             const taskTitle = document.createElement('h3');
             taskTitle.classList.add('taskTitle');
@@ -590,19 +620,19 @@ function screenController() {
                 taskTitle.style.backgroundColor ='white';
             }
                 
-            task.appendChild(taskTitle);
+            taskContent.appendChild(taskTitle);
 
             const taskDueDate = document.createElement('div');
             taskDueDate.classList.add('taskDueDate');
             taskDueDate.textContent = projectTask.dueDate;
-            task.appendChild(taskDueDate);
+            taskContent.appendChild(taskDueDate);
 
-            task.dataset.priority = projectTask.priority;
+            taskContent.dataset.priority = projectTask.priority;
 
             const taskDescription = document.createElement('p');
             taskDescription.classList.add('taskDescription');
             taskDescription.textContent = projectTask.description;
-            task.appendChild(taskDescription);
+            taskContent.appendChild(taskDescription);
             
 
             
@@ -842,7 +872,8 @@ function screenController() {
 
         ////highlighting activeProject 
         taskBarContents.forEach((taskBarContent) => {
-            if (taskBarContent.dataset.projectTitle === activeProjectTitle) {
+
+            if (Number(taskBarContent.dataset.projectIndex) === activeProjectIndex) {
                 taskBarContent.classList.add('activeProject');
             }
         })
@@ -1132,11 +1163,14 @@ function screenController() {
 
     function openEditProjectForm() {
 
+        console.log(`is this running? wtf`);
+        
+
         // ////open project form 
         openProjectForm();
 
         ////prefill openProjectForm values with info from activeProject 
-        // document.querySelector('#projectTitle').value = toDoList.getActiveProjectTitle(); 
+        document.querySelector('#projectTitle').value = toDoList.getActiveProjectTitle(); 
             
 
     }
