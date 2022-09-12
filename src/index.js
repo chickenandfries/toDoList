@@ -21,6 +21,13 @@ function Board() {
     board.push(Project('upcoming', 2));
 
 
+    ////push deleted projects here... 
+    let projectTrash =[];
+
+
+    
+    
+
   
     const addProject = (title, projectIndex) => {
         board.push(Project(title, projectIndex))
@@ -43,31 +50,6 @@ function Board() {
         return board   
     }
 
-    //////don't need this... Controller can access Task directly.. 
-    // const getPriority = (projectTitle, taskTitle) => {
-    //     console.log(`getPriority function in Board is running w/ ${projectTitle}, ${taskTitle}`);
-        
-
-    //     for (let i = 0; i< board.length; i++) {
-    //         if (board[i].title === projectTitle) {
-    //             console.log(`found project`);
-                
-    //             for (let j = 0; j<board[i].tasks.length; j++) {
-    //                 if (board[i].tasks[j].title ===taskTitle) {
-    //                     console.log(board[i].tasks[j].getPriority());
-    //                     return board[i].tasks[j].getPriority();
-                        
-                        
-    //                 }
-    //             }
-    //         }
-    //     }
-
-    //     console.log(`this shouldn't be running`);
-        
-        
-        
-    // }
 
 
     const editTaskInputs = (projectIndex, taskIndex, ...taskInputs) => {
@@ -81,7 +63,7 @@ function Board() {
                     console.log(board[i].tasks[j].taskIndex)
 
                     if (board[i].tasks[j].taskIndex === taskIndex) {
-                        console.log(`found matching task!! line 79`);
+                        console.log(`found matching task!!`);
                         
                         board[i].tasks.splice(j,1,Task(taskIndex, ...taskInputs))
                         return 
@@ -92,6 +74,19 @@ function Board() {
 
 
     }
+
+
+    const editProjectInputs = (projectIndex, projectTitle) => {
+        for (let i = 0; i< board.length; i++) {
+            if (board[i].projectIndex === projectIndex) {
+                console.log(`found matching project`);
+                board.splice(i,1,Project(projectIndex, projectTitle))
+                return 
+            }
+        }
+        
+    }
+
 
 
 
@@ -129,7 +124,25 @@ function Board() {
         
     // }
 
+
     const getBoard = () => board;
+
+
+    const deleteProject = (projectIndex) => {
+        for (let i = 0; i< board.length; i++) {
+            if (board[i].projectIndex === projectIndex) {
+                projectTrash.push(board.splice(i,1))
+            }
+
+        }
+
+    
+    console.log('board');
+    console.log(board);
+
+    console.log(`this is now projectTrash`);
+    console.log(projectTrash);
+    }
 
     return {
         getBoard, 
@@ -137,6 +150,8 @@ function Board() {
         addTask,
         // getPriority,
         editTaskInputs,
+        deleteProject,
+        editProjectInputs
     }
 
 }
@@ -317,18 +332,27 @@ function Controller() {
 
 
     const editTaskInputs = (taskTitle, taskDueDate, taskPriority, taskDescription)=> {
-        console.log(`editTaskInputsis now running`);
+        console.log(`editTaskInputs is now running`);
 
         board.editTaskInputs(getActiveProjectIndex(), getActiveTaskTaskIndex(), taskTitle, taskDueDate, taskPriority, taskDescription)
         
-      
-
-        console.log(`thisis active Task now`);
+        console.log(`this is active Task now`);
         console.log(activeTask);
         
         
 
         activeTask = '';
+    }
+
+    const editProjectInputs = (projectTitle) => {
+        console.log('editProjectInputs now running');
+
+        board.editProjectInputs(getActiveProjectIndex(), projectTitle)
+        
+    }
+
+    const deleteProject = () => {
+        board.deleteProject(getActiveProjectIndex())
     }
 
 
@@ -347,6 +371,9 @@ function Controller() {
         getActiveTaskPriority,
         getActiveTaskTaskIndex,
         editTaskInputs,
+        deleteProject,
+        editProjectInputs,
+
     }
      
 }
@@ -472,15 +499,17 @@ function screenController() {
             const projectsNavProject = document.createElement('div');
             projectsNavProject.classList.add('taskBarContents');
 
-            ////user input title needed here.... use title to switch between tasks 
             projectsNavProject.dataset.projectTitle = `${board[i].title}`
 
-            ////update: use projectIndex to switch between tasks 
+            ////update: use projectIndex to switch between projects
             projectsNavProject.dataset.projectIndex = i;
-         
-            // ////projectTargetID is what will be used to switch between taskView 
-            // projectsNavProject.dataset.projectTargetID = `${i}`;
 
+
+            console.log(`right before openEditprojectForm`);            
+            projectsNavProject.addEventListener('click', openEditProjectForm)
+            projectsNavProject.addEventListener('click', console.log('project has been clicked!!'));
+
+         
 
             projectsNav.appendChild(projectsNavProject);
 
@@ -488,9 +517,8 @@ function screenController() {
             const projectNavProjectHThree = document.createElement('h3');
             projectNavProjectHThree.textContent = `${board[i].title}`;
             projectsNavProject.appendChild(projectNavProjectHThree);
-
-
-            
+         
+          
             
         }
         
@@ -651,9 +679,10 @@ function screenController() {
         const addProjectFormUserTitleInput = document.createElement('input');
         addProjectFormUserTitleInput.classList.add('addProjectFormTitleInput');
         addProjectFormUserTitleInput.setAttribute('type', 'text');  
-        addProjectFormUserTitleInput.setAttribute('name', 'projectTitle');
+        addProjectFormUserTitleInput.setAttribute('id', 'projectTitle');
    
         addProjectFormUserLiTitle.appendChild(addProjectFormUserTitleInput);
+
 
 
         const addProjectFormUserButtons = document.createElement('div');
@@ -849,6 +878,8 @@ function screenController() {
     const openProjectForm = function() {
         const addProjectForm = document.querySelector('#addProjectForm');
         addProjectForm.style.display = 'block';
+        console.log(`openProjectForm succesfully run `);
+        
 
     }
 
@@ -870,8 +901,15 @@ function screenController() {
 
 
     function projectFormSubmit() {
-        const addProjectFormUserTitleInput = document.querySelector('.addProjectFormTitleInput');
-        const projectTitle = addProjectFormUserTitleInput.value;
+        // const addProjectFormUserTitleInput = document.querySelector('#projectTitle');
+        // const projectTitle = addProjectFormUserTitleInput.value;
+        
+        const projectTitle = document.querySelector('#projectTitle').value;
+
+        console.log(`projectTitle below for form submission`);
+        console.log(projectTitle);
+        
+        
 
         toDoList.addProject(projectTitle);
         updateScreen();        
@@ -1056,10 +1094,10 @@ function screenController() {
 
         */
 
-        ////open project form 
+        ////open task form 
         openTaskForm();
 
-        ////prefill openTaskForm values with info from activeProject
+        ////prefill openTaskForm values with info from activeTask 
 
         document.querySelector('#taskTitle').value = toDoList.getActiveTask().title;
         document.querySelector('#taskDescription').value = toDoList.getActiveTask().description;
@@ -1089,6 +1127,18 @@ function screenController() {
         recallPriorityFlagStyle();
 
         
+    }
+
+
+    function openEditProjectForm() {
+
+        // ////open project form 
+        openProjectForm();
+
+        ////prefill openProjectForm values with info from activeProject 
+        // document.querySelector('#projectTitle').value = toDoList.getActiveProjectTitle(); 
+            
+
     }
 
     function removePriorityFlagStyle() {
