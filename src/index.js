@@ -22,6 +22,7 @@ function Board() {
     board.push(Project('upcoming', 2));
 
 
+
     ////push deleted projects here... 
     let projectTrash =[];
 
@@ -31,14 +32,18 @@ function Board() {
 
   
     const addProject = (title, projectIndex) => {
-        board.push(Project(title, projectIndex))
+        board.push(Project(title, projectIndex));
+        
+        console.log(`Board - addProject run. below is new board`);
+        console.log(board);
+        
+        
+        
+        
     }
 
 
     const addTask = (projectIndex, taskIndex, ...taskInputs) => {        
-        console.log(`taskInputs below`);        
-        console.log(...taskInputs);
-        
 
         for (let i = 0; i< board.length; i++) {
             if (board[i].projectIndex === projectIndex) {
@@ -130,20 +135,41 @@ function Board() {
 
 
     const deleteProject = (projectIndex) => {
+
+        /*
+        after deleting project
+            loop through board, starting with project with project Index that is greater than the deleted project's project index, SUBTRACT ONE 
+
+        */
+
+        console.log(`board - deleteProject is running`);
+        console.log(`this is projectIndex ${projectIndex}`);
+        
+        
+        console.log('board');
+        console.log(board);
         for (let i = 0; i< board.length; i++) {
             if (board[i].projectIndex === projectIndex) {
                 projectTrash.push(board.splice(i,1))
             }
 
+        };
+
+        ////if project's projectIndex is greater than projectIndex of the project that was deleted, subtract one from that projectIndex (pushing new project)
+        for (let i = 3; i < board.length; i++) {
+            if (board[i].projectIndex > projectIndex) {
+                board.splice(i,1,Project(board[i].title, i-1))
+            }
         }
 
     
-    console.log('board');
-    console.log(board);
+        console.log('board');
+        console.log(board);
 
-    console.log(`this is now projectTrash`);
-    console.log(projectTrash);
+        console.log(`this is now projectTrash`);
+        console.log(projectTrash);
     }
+
 
     return {
         getBoard, 
@@ -218,13 +244,10 @@ function Controller() {
     let activeProject = board.getBoard()[0];
 
 
-    console.log(`boardBoard below`);
-    console.log(boardBoard);
-
     ////projectIndex counter
-    let projectIndex = 3;
+    let controllerProjectIndex = 3;
     ////taskIndex counter
-    let taskIndex = 2; 
+    let controllerTaskIndex = 2; 
     const getTaskIndex = () => taskIndex;
            
   
@@ -235,7 +258,7 @@ function Controller() {
     let getActiveProjectTasks = () => activeProject.tasks;
 
     let getActiveProjectIndex = () => activeProject.projectIndex; 
-    console.log(getActiveProjectIndex());
+
 
     
 
@@ -249,8 +272,6 @@ function Controller() {
 
     let activeTask = "";
     
-    console.log(`activeTask below `);
-    console.log(activeTask);
 
     const getActiveTask = () => activeTask;
 
@@ -275,8 +296,9 @@ function Controller() {
         console.log(`switchActiveProject is running`);
         
         for (let i=0; i < boardBoard.length; i++) {
-            if (boardBoard[i].projectIndex === selectedProjectIndex) {
-                console.log(`found project`);
+            if (board.getBoard()[i].projectIndex === selectedProjectIndex) {
+                console.log(`switchActiveProject function - found project`);
+                
                 
        
                 activeProject = boardBoard[i];
@@ -301,9 +323,9 @@ function Controller() {
 
 
     const addTask = (title, dueDate, priority, description) => {
-        board.addTask(getActiveProjectIndex(), taskIndex, title, dueDate, priority, description);
+        board.addTask(getActiveProjectIndex(), controllerTaskIndex, title, dueDate, priority, description);
         
-        taskIndex++;
+        controllerTaskIndex++;
         
     };
         // let activeProjectTasks = getACtiveProjectTasks();
@@ -317,8 +339,8 @@ function Controller() {
 
 
     const addProject = (projectTitle) => {
-        board.addProject(projectTitle, projectIndex);
-        projectIndex++;
+        board.addProject(projectTitle, controllerProjectIndex);
+        controllerProjectIndex++;
 
     }
 
@@ -345,7 +367,7 @@ function Controller() {
         activeTask = '';
     }
 
-    
+
     const editProjectInputs = (projectTitle) => {
         console.log('editProjectInputs now running');
 
@@ -353,8 +375,18 @@ function Controller() {
         
     }
 
-    const deleteProject = () => {
-        board.deleteProject(getActiveProjectIndex())
+    const deleteProject = (projectIndex) => {
+        /*
+        after deleting project
+            projectIndex--
+            
+        */
+        board.deleteProject(projectIndex);
+        controllerProjectIndex = controllerProjectIndex-1;
+
+        console.log(`new global projectIndex in Controller = ${controllerProjectIndex}`);
+        
+
     }
 
 
@@ -406,7 +438,6 @@ function screenController() {
            
 
         let activeProjectTitle = toDoList.getActiveProjectTitle();
-        console.log(`this is activeProjectTitle: ${activeProjectTitle}`);
 
         let activeProjectIndex = toDoList.getActiveProjectIndex();
 
@@ -516,9 +547,9 @@ function screenController() {
             projectsNavProjectContent.dataset.projectIndex = i;
 
 
-            console.log(`right before openEditProjectForm`);            
+              
             projectsNavProjectContent.addEventListener('click', openEditProjectForm)
-            projectsNavProjectContent.addEventListener('click', console.log('project has been clicked!!'));
+
 
 
             projectsNavProject.appendChild(projectsNavProjectContent);
@@ -528,7 +559,9 @@ function screenController() {
             projectsNavProjectContent.appendChild(projectNavProjectHThree);
 
             const projectsNavProjectEdit = document.createElement('div');
-            projectsNavProjectEdit.classList.add('projectsNavProjectEdit')
+            projectsNavProjectEdit.classList.add('projectsNavProjectEdit');
+            projectsNavProjectEdit.dataset.projectIndex = i;
+            projectsNavProjectEdit.addEventListener('click', deleteProject)
             projectsNavProject.appendChild(projectsNavProjectEdit);
             const editProjectImg = new Image();
             editProjectImg.src = editImg;
@@ -563,7 +596,7 @@ function screenController() {
         ////showing which project is active
         const activeProjectHeading = document.createElement('h2');
         activeProjectHeading.classList.add('activeProjectHeading');
-        console.log(`this is activeProjectTitle: ${activeProjectTitle}`);
+
         
         activeProjectHeading.textContent = activeProjectTitle;
         taskView.appendChild(activeProjectHeading);
@@ -866,8 +899,6 @@ function screenController() {
         taskBarContents.forEach((taskBarContent) => {
             taskBarContent.addEventListener('click', switchActiveProjectClick)
         })
-        console.log('switchActiveProjectClick event has been added')
-
 
         ////highlighting activeProject 
         taskBarContents.forEach((taskBarContent) => {
@@ -908,8 +939,7 @@ function screenController() {
     const openProjectForm = function() {
         const addProjectForm = document.querySelector('#addProjectForm');
         addProjectForm.style.display = 'block';
-        console.log(`openProjectForm succesfully run `);
-        
+
 
     }
 
@@ -936,9 +966,7 @@ function screenController() {
         
         const projectTitle = document.querySelector('#projectTitle').value;
 
-        console.log(`projectTitle below for form submission`);
-        console.log(projectTitle);
-        
+
         
 
         toDoList.addProject(projectTitle);
@@ -1162,7 +1190,6 @@ function screenController() {
 
     function openEditProjectForm() {
 
-        console.log(`is this running? wtf`);
         
 
         // ////open project form 
@@ -1196,6 +1223,18 @@ function screenController() {
             
         });
 
+    }
+
+    function deleteProject(e) {
+        
+        console.log(e.target);
+        
+        const projectIndex = Number(e.target.dataset.projectIndex); 
+  
+        
+        toDoList.deleteProject(projectIndex);
+
+        updateScreen();
     }
 
 
@@ -1239,7 +1278,6 @@ function screenController() {
 }
 
 
-console.log('------------------');
 
 
 screenController();

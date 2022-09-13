@@ -116,7 +116,19 @@ header h1 {
     display: flex;
     justify-content: center;
     align-self: center;
+    border: 2px solid black;
  
+}
+
+.projectsNavProjectEdit > * {
+    pointer-events: none;
+}
+
+
+.projectsNavProjectEdit:hover {
+    background-color: white;
+    
+    
 }
 
 .projectsContent {
