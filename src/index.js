@@ -345,6 +345,7 @@ function Controller() {
         activeTask = '';
     }
 
+    
     const editProjectInputs = (projectTitle) => {
         console.log('editProjectInputs now running');
 
@@ -527,6 +528,7 @@ function screenController() {
             projectsNavProjectContent.appendChild(projectNavProjectHThree);
 
             const projectsNavProjectEdit = document.createElement('div');
+            projectsNavProjectEdit.classList.add('projectsNavProjectEdit')
             projectsNavProject.appendChild(projectsNavProjectEdit);
             const editProjectImg = new Image();
             editProjectImg.src = editImg;
@@ -534,10 +536,7 @@ function screenController() {
 
         }
 
-        const upcomingImgPNG = new Image();
-        upcomingImgPNG.src = upcomingImg;
-        upcomingImgPNG.classList.add('upcomingImgPNG');
-        upcoming.appendChild(upcomingImgPNG);
+    
         
     
         const addProject = document.createElement('div');
