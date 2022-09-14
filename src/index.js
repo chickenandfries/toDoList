@@ -24,11 +24,7 @@ function Board() {
 
 
     ////push deleted projects here... 
-    let projectTrash =[];
-
-
-    
-    
+    let projectTrash =[];   
 
   
     const addProject = (title, projectIndex) => {
@@ -146,8 +142,10 @@ function Board() {
         console.log(`this is projectIndex ${projectIndex}`);
         
         
-        console.log('board');
+        console.log(`board before delete below`);
         console.log(board);
+        
+
         for (let i = 0; i< board.length; i++) {
             if (board[i].projectIndex === projectIndex) {
                 projectTrash.push(board.splice(i,1))
