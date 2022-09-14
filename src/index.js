@@ -26,6 +26,10 @@ function Board() {
     ////push deleted projects here... 
     let projectTrash =[];   
 
+    ////push completed tasks here.... 
+    let taskTrash =[];
+
+
   
     const addProject = (title, projectIndex) => {
         board.push(Project(title, projectIndex));
@@ -248,9 +252,7 @@ function Controller() {
     let controllerTaskIndex = 2; 
     const getTaskIndex = () => taskIndex;
            
-  
-
-        
+          
     let getActiveProjectTitle = () => activeProject.title; 
 
     let getActiveProjectTasks = () => activeProject.tasks;
@@ -265,9 +267,6 @@ function Controller() {
     board.addTask(getActiveProjectIndex(), 1, 'a','b','p4','e');
 
     
-
-
-
     let activeTask = "";
     
 
@@ -278,6 +277,8 @@ function Controller() {
     const getActiveTaskPriority =() => activeTask.priority;
 
     const getActiveTaskTaskIndex =() => activeTask.taskIndex;
+
+    const removeActiveTask = () => activeTask ="";
 
     
 
@@ -362,7 +363,7 @@ function Controller() {
         
         
 
-        activeTask = '';
+        removeActiveTask();
     }
 
 
@@ -398,6 +399,7 @@ function Controller() {
         getActiveProjectTasks,
         getActiveProjectIndex,
         switchActiveProject,
+        removeActiveTask,
         addProject,
         switchActiveTask,
         getActiveTaskTitle,
@@ -987,21 +989,8 @@ function screenController() {
         console.log(`active Task task index below`);
         console.log(toDoList.getActiveTaskTaskIndex());
 
+                
         
-        console.log(!toDoList.getActiveTask());
-
-        
-        
-        
-        
-        // console.log(typeof(toDoList.getActiveTaskTaskIndex()));
-        // console.log(typeof(toDoList.getTaskIndex()));
-        // console.log(toDoList.getActiveTaskTaskIndex());
-        // console.log(toDoList.getTaskIndex());
-
-        // if (toDoList.getActiveTaskTaskIndex() !== toDoList.getTaskIndex()) {
-        //     console.log(`buttbutt`);
-        // }
         
     }
 
@@ -1031,7 +1020,12 @@ function screenController() {
 
         removePriorityFlagStyle();
 
-        activeTask = "";
+        toDoList.removeActiveTask();
+
+
+        console.log(`is there activeTask here?`);
+        console.log(toDoList.removeActiveTask());
+        
 
 
 
@@ -1092,7 +1086,6 @@ function screenController() {
             toDoList.editTaskInputs(taskTitle, taskDueDate, taskPriority, taskDescription);
             cancelTaskForm();
             updateScreen();
-
             return 
             
         }    
@@ -1114,20 +1107,18 @@ function screenController() {
 
         */
 
-        console.log(`switchActiveTaskClick has run`);     
+           
         
 
         ////grab the Index from the task that was clicked on 
         const selectedTaskIndex = e.target.dataset.taskIndex;
-        console.log(`clicked ${e.target.dataset.taskIndex}`);
+        console.log(`clicked task with taskIndex of ${e.target.dataset.taskIndex}`);
         
         ////if what was clicked on doesn't have taskTitle, return 
         if (!selectedTaskIndex) return;
 
         toDoList.switchActiveTask(Number(selectedTaskIndex));
 
-        console.log(`this is now activeTask`);
-        console.log(toDoList.getActiveTask());
         
         // updateScreen();
        
@@ -1146,7 +1137,6 @@ function screenController() {
         3. pre-fill addTaskForm values with selected Task info 
         4.  if cancel - cancelForm
             if submit - editTaskFormSubmit 
-        
 
         */
 
@@ -1161,10 +1151,8 @@ function screenController() {
         taskPriority = toDoList.getActiveTaskPriority();
 
 
-        
-
         console.log(`is there activeTask here?`);
-        console.log(activeTask);
+        console.log(toDoList.getActiveTask());
         
         
 
