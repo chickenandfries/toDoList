@@ -1231,17 +1231,21 @@ function screenController() {
 
 
         const projectMenuEdit = document.createElement('div');
+        projectMenuEdit.classList.add('projectMenuChildren');
         projectMenu.appendChild(projectMenuEdit);
+
         const projectEditP = document.createElement('p');
         projectEditP.textContent = 'Edit Project';
         projectMenuEdit.appendChild(projectEditP);
 
         const projectEditImg = new Image();
         projectEditImg.src = editImg;
+        projectEditImg.classList.add('projectMenuChildrenImg');
         projectMenuEdit.appendChild(projectEditImg);
         
 
         const projectMenuDelete = document.createElement('div');
+        projectMenuDelete.classList.add('projectMenuChildren');
         projectMenu.appendChild(projectMenuDelete);
 
         const projectDeleteP = document.createElement('p');
@@ -1250,7 +1254,8 @@ function screenController() {
         
         const projectDeleteImg = new Image();
         projectDeleteImg.src = deleteImg;
-        projectMenuEdit.appendChild(projectDeleteImg);
+        projectDeleteImg.classList.add('projectMenuChildrenImg');
+        projectMenuDelete.appendChild(projectDeleteImg);
 
 
 
@@ -1271,9 +1276,32 @@ function screenController() {
     };
 
 
+    ////if click outside the dialogue box, close projectMenu
+    // function closeProjectMenu(e) {
+    //     const projectMenu = document.querySelector('.projectMenu');
+
+    //     if(!projectMenu.contains(e.target)) {
+    //         projectMenu.style.display ='none';
+    //     }
+
+    // };
+    // document.addEventListener('click', closeProjectMenu);
+
+    document.addEventListener('cick', function closeProjectMenu(e) {
+        const projectMenu = document.querySelector('.projectMenu');
+
+        if(!projectMenu.contains(e.target)) {
+            projectMenu.style.display ='none';
+        }
+    })
 
 
 
+
+
+
+
+      
     
 
     // function editTask() {

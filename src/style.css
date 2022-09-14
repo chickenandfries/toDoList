@@ -128,19 +128,36 @@ header h1 {
 
 .projectsNavProjectEdit:hover {
     background-color: white;
-    
-    
 }
 
 .projectMenu {
     position: absolute;
     display: inline-block;
-    height: 300px;
-    width: 200px;
+    height: 100px;
+    width: 150px;
     background-color: #c9c8c7;
     border: 1px solid black;
     top: 20px;
+    padding: 0px;
 }
+
+.projectMenuChildren {
+    display: flex;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    padding-top: 0px;
+    padding-bottom: 0px;
+
+
+    justify-content: space-between;
+  
+}
+
+.projectMenuChildrenImg {
+    align-self: center;
+}
+
+
 
 .projectsContent {
     display: flex;
