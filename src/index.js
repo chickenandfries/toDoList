@@ -7,6 +7,8 @@ import upcomingImg from './img/upcoming.png';
 import addProjectImg from './img/addProject.png';
 import checkMarkImg from './img/checkMark.png';
 import flagImg from './img/flag.png';
+import menuImg from './img/menu.png';
+import deleteImg from'./img/delete.png';
 import editImg from './img/edit.png';
 
 
@@ -92,6 +94,8 @@ function Board() {
         }
         
     }
+
+
 
 
 
@@ -561,11 +565,11 @@ function screenController() {
             const projectsNavProjectEdit = document.createElement('div');
             projectsNavProjectEdit.classList.add('projectsNavProjectEdit');
             projectsNavProjectEdit.dataset.projectIndex = i;
-            projectsNavProjectEdit.addEventListener('click', deleteProject)
+            projectsNavProjectEdit.addEventListener('click', projectMenuClick)
             projectsNavProject.appendChild(projectsNavProjectEdit);
-            const editProjectImg = new Image();
-            editProjectImg.src = editImg;
-            projectsNavProjectEdit.appendChild(editProjectImg);
+            const projectMenuImg = new Image();
+            projectMenuImg.src = menuImg;
+            projectsNavProjectEdit.appendChild(projectMenuImg);
 
         }
 
@@ -1087,7 +1091,6 @@ function screenController() {
             cancelTaskForm();
             updateScreen();
             return 
-            
         }    
 
     }
@@ -1209,9 +1212,53 @@ function screenController() {
             
         });
 
+    };
+
+    
+
+
+    const projectMenuClick = (e) => {
+        const projectIndex = Number(e.target.dataset.projectIndex);
+
+        console.log(`projectMenuClick being run` );
+        
+
+
+        const projectMenu = document.createElement('div')
+        projectMenu.classList.add('projectMenu');
+        const projectsNavProjectEdit = document.querySelector('.projectsNavProjectEdit');
+        projectsNavProjectEdit.appendChild(projectMenu);
+
+
+        const projectMenuEdit = document.createElement('div');
+        projectMenu.appendChild(projectMenuEdit);
+        const projectEditP = document.createElement('p');
+        projectEditP.textContent = 'Edit Project';
+        projectMenuEdit.appendChild(projectEditP);
+
+        const projectEditImg = new Image();
+        projectEditImg.src = editImg;
+        projectMenuEdit.appendChild(projectEditImg);
+        
+
+        const projectMenuDelete = document.createElement('div');
+        projectMenu.appendChild(projectMenuDelete);
+
+        const projectDeleteP = document.createElement('p');
+        projectDeleteP.textContent = "Delete Project";
+        projectMenuDelete.appendChild(projectDeleteP);
+        
+        const projectDeleteImg = new Image();
+        projectDeleteImg.src = deleteImg;
+        projectMenuEdit.appendChild(projectDeleteImg);
+
+
+
+        
+        
     }
 
-    function deleteProject(e) {
+    function deleteProjectClick(e) {
         
         console.log(e.target);
         
@@ -1221,7 +1268,7 @@ function screenController() {
         toDoList.deleteProject(projectIndex);
 
         updateScreen();
-    }
+    };
 
 
 
