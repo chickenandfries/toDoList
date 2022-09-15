@@ -569,6 +569,7 @@ function screenController() {
             projectsNavProject.appendChild(projectsNavProjectEdit);
             const projectMenuImg = new Image();
             projectMenuImg.src = menuImg;
+            projectMenuImg.classList.add('projectMenuImg')
             projectsNavProjectEdit.appendChild(projectMenuImg);
 
         }
@@ -1218,21 +1219,33 @@ function screenController() {
 
 
     const projectMenuClick = (e) => {
-        const projectIndex = Number(e.target.dataset.projectIndex);
-
-        console.log(`projectMenuClick being run` );
+        const projectIndex = (e.target.dataset.projectIndex);
+        console.log(`this is projectIndex = `);
+        console.log(projectIndex);
         
-
+        
 
         const projectMenu = document.createElement('div')
         projectMenu.classList.add('projectMenu');
         const projectsNavProjectEdit = document.querySelector('.projectsNavProjectEdit');
         projectsNavProjectEdit.appendChild(projectMenu);
 
+        
+
+        projectMenu.addEventListener('click', function() {
+            console.log(`projectMenu being clicked`);
+            
+        })
+
 
         const projectMenuEdit = document.createElement('div');
         projectMenuEdit.classList.add('projectMenuChildren');
+        projectMenuEdit.dataset.projectIndex = projectIndex;
         projectMenu.appendChild(projectMenuEdit);
+
+        projectMenuEdit.addEventListener('click', function() {
+            console.log('projectMenuEdit being clicked');
+        })
 
         const projectEditP = document.createElement('p');
         projectEditP.textContent = 'Edit Project';
@@ -1246,7 +1259,12 @@ function screenController() {
 
         const projectMenuDelete = document.createElement('div');
         projectMenuDelete.classList.add('projectMenuChildren');
+        projectMenuDelete.dataset.projectIndex = projectIndex;
         projectMenu.appendChild(projectMenuDelete);
+
+        projectMenuDelete.addEventListener('click', deleteProjectClick);
+
+
 
         const projectDeleteP = document.createElement('p');
         projectDeleteP.textContent = "Delete Project";
@@ -1255,25 +1273,48 @@ function screenController() {
         const projectDeleteImg = new Image();
         projectDeleteImg.src = deleteImg;
         projectDeleteImg.classList.add('projectMenuChildrenImg');
-        projectMenuDelete.appendChild(projectDeleteImg);
+        projectMenuDelete.appendChild(projectDeleteImg);     
+               
 
 
-
-        
-        
     }
+
+    // document.addEventListener('click', e => {
+    //     if (!e.target.closest('.projectMenu')) {
+    //         document.querySelector('.projectMenu').style.display = 'none';
+    //     }
+    // });
+
+ 
 
     function deleteProjectClick(e) {
         
-        console.log(e.target);
+        // let selectedProject;
+
+        // ////selecting all projects 
+        // const projects = document.querySelectorAll('.taskBarContents');
+
+        // for (let i = 1; i <= projects.length; i++) {
+        //     if (projects[i].dataset.projectIndex === )
+        // }
+        
         
         const projectIndex = Number(e.target.dataset.projectIndex); 
-  
+        console.log(`this is projectIndex from deleteProjectClick = ${projectIndex}`);
         
+
         toDoList.deleteProject(projectIndex);
+  
+        // setTimeout(() => {
+        //     toDoList.deleteProject(projectIndex)
+        // }, 10)
+        
 
         updateScreen();
     };
+
+
+    
 
 
     ////if click outside the dialogue box, close projectMenu
@@ -1287,14 +1328,22 @@ function screenController() {
     // };
     // document.addEventListener('click', closeProjectMenu);
 
-    document.addEventListener('cick', function closeProjectMenu(e) {
-        const projectMenu = document.querySelector('.projectMenu');
+    // document.addEventListener('click', function closeProjectMenu(e) {
+    //     const projectMenu = document.querySelector('.projectMenu');
+    //     console.log(`click document registering`);
+        
 
-        if(!projectMenu.contains(e.target)) {
-            projectMenu.style.display ='none';
-        }
-    })
+    //     if(!projectMenu.contains(e.target)) {
+    //         projectMenu.style.display ='none';
+    //     }
+    // });
 
+    // document.addEventListener('click', e => {
+    //     const projectMenu = document.querySelector('.projectMenu')
+    //     if (!e.target.closest('.menu')) {
+    //         alert('you clicked outside of the menu.')
+    //     }
+    // })
 
 
 
