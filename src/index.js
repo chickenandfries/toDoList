@@ -1,6 +1,7 @@
 'use strict'
 
 import './style.css';
+import {addDays, format} from 'date-fns';
 import inboxImg from './img/inbox.png';
 import todayImg from './img/today.png';
 import upcomingImg from './img/upcoming.png';
@@ -392,6 +393,19 @@ function Controller() {
 
     }
 
+    ////DATE STUFF
+    const tomorrow = addDays(new Date(), 2);
+    console.log(tomorrow);
+    const tomorrowFormatted = format(tomorrow, "MM/dd/yyyy");
+    console.log(tomorrowFormatted);
+    
+
+    
+    
+
+
+
+
 
     return {
         addTask,
@@ -452,7 +466,7 @@ function screenController() {
         body.appendChild(header);
     
         const headerTitle = document.createElement('h1');
-        headerTitle.textContent = 'ToDoList'
+        headerTitle.textContent = 'GetItDone'
         header.appendChild(headerTitle);
     
 
@@ -842,7 +856,7 @@ function screenController() {
         addTaskFormUserDueDateInput.setAttribute('type', 'text');  
         addTaskFormUserDueDateInput.setAttribute('id', 'taskDueDate');
         if (activeProjectTitle === 'today') {
-            addTaskFormUserDueDateInput.value = new Date();
+            addTaskFormUserDueDateInput.value = format(new Date(), "MM/dd/yyyy");
         }
         addTaskFormUserLiDueDate.appendChild(addTaskFormUserDueDateInput);
 
@@ -1227,9 +1241,19 @@ function screenController() {
 
         const projectMenu = document.createElement('div')
         projectMenu.classList.add('projectMenu');
-        const projectsNavProjectEdit = document.querySelector('.projectsNavProjectEdit');
-        projectsNavProjectEdit.appendChild(projectMenu);
 
+
+
+        let projectsNavProjectEdit;
+        const projectsNavProjectEdits = document.querySelectorAll('.projectsNavProjectEdit');
+        for (let i=0; i<projectsNavProjectEdits.length; i++) {
+            if (projectsNavProjectEdits[i].dataset.projectIndex === projectIndex) {
+                projectsNavProjectEdit = projectsNavProjectEdits[i];                
+            }
+        }
+
+
+        projectsNavProjectEdit.appendChild(projectMenu);
         
 
         projectMenu.addEventListener('click', function() {
@@ -1308,9 +1332,12 @@ function screenController() {
         // setTimeout(() => {
         //     toDoList.deleteProject(projectIndex)
         // }, 10)
-        
 
         updateScreen();
+
+        ////stop parent click event (for projectMenu) from firing 
+        e.stopPropagation();
+
     };
 
 
