@@ -466,7 +466,7 @@ function screenController() {
         body.appendChild(header);
     
         const headerTitle = document.createElement('h1');
-        headerTitle.textContent = 'GetItDone'
+        headerTitle.textContent = 'ToDoList'
         header.appendChild(headerTitle);
     
 
