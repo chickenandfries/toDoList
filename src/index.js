@@ -641,11 +641,26 @@ function screenController() {
             taskComplete.classList.add('taskComplete')
             task.appendChild(taskComplete);
 
-            const checkMarkImgPNG = new Image();            
-            checkMarkImgPNG.src = checkMarkImg;
-            checkMarkImgPNG.classList.add('checkMarkImgPNG');
-            // checkMarkImgPNG.style.backgroundColor = 'red';
-            taskComplete.appendChild(checkMarkImgPNG);
+            const checkMark = document.createElement('span');
+            checkMark.classList.add('dot');
+            taskComplete.appendChild(checkMark);
+
+            if (projectTask.getPriority() === 'p1') {
+                checkMark.style.border ='3px solid red';
+            }   else if (projectTask.getPriority() === 'p2') {
+                checkMark.style.border ='3px solid orange';
+            }   else if (projectTask.getPriority() === 'p3') {
+                checkMark.style.border ='3px solid skyblue';
+            }   else if (projectTask.getPriority() === 'p4') {
+                checkMark.style.border ='2px solid black';
+            }
+
+
+            // const checkMarkImgPNG = new Image();            
+            // checkMarkImgPNG.src = checkMarkImg;
+            // checkMarkImgPNG.classList.add('checkMarkImgPNG');
+            // // checkMarkImgPNG.style.backgroundColor = 'red';
+            // taskComplete.appendChild(checkMarkImgPNG);
 
 
             ////create task 
@@ -661,15 +676,15 @@ function screenController() {
             taskTitle.classList.add('taskTitle');
             taskTitle.textContent = projectTask.title;
             
-            if (projectTask.getPriority() === 'p1') {
-                taskTitle.style.backgroundColor ='red';
-            }   else if (projectTask.getPriority() === 'p2') {
-                taskTitle.style.backgroundColor ='orange';
-            }   else if (projectTask.getPriority() === 'p3') {
-                taskTitle.style.backgroundColor ='skyblue';
-            }   else if (projectTask.getPriority() === 'p4') {
-                taskTitle.style.backgroundColor ='white';
-            }
+            // if (projectTask.getPriority() === 'p1') {
+            //     taskTitle.style.backgroundColor ='red';
+            // }   else if (projectTask.getPriority() === 'p2') {
+            //     taskTitle.style.backgroundColor ='orange';
+            // }   else if (projectTask.getPriority() === 'p3') {
+            //     taskTitle.style.backgroundColor ='skyblue';
+            // }   else if (projectTask.getPriority() === 'p4') {
+            //     taskTitle.style.backgroundColor ='white';
+            // }
                 
             taskContent.appendChild(taskTitle);
 
@@ -1405,6 +1420,43 @@ function screenController() {
 
     //initial render 
     updateScreen();
+
+
+    function storageAvailable(type) {
+        let storage;
+        try {
+            storage = window[type];
+            const x = '__storage_test__';
+            storage.setItem(x, x);
+            storage.removeItem(x);
+            return true;
+        }
+        catch (e) {
+            return e instanceof DOMException && (
+                // everything except Firefox
+                e.code === 22 ||
+                // Firefox
+                e.code === 1014 ||
+                // test name field too, because code might not be present
+                // everything except Firefox
+                e.name === 'QuotaExceededError' ||
+                // Firefox
+                e.name === 'NS_ERROR_DOM_QUOTA_REACHED') &&
+                // acknowledge QuotaExceededError only if there's something already stored
+                (storage && storage.length !== 0);
+        }
+    }
+
+    if (storageAvailable('localStorage')) {
+        // Yippee! We can use localStorage awesomeness
+        console.log(`available`);
+        
+    }
+    else {
+        // Too bad, no localStorage for us
+        console.log(`no`);
+        
+    }
 
 
 
