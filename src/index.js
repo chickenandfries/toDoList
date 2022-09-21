@@ -258,11 +258,16 @@ function Controller() {
     const getTaskIndex = () => taskIndex;
            
           
-    let getActiveProjectTitle = () => activeProject.title; 
+    const getActiveProjectTitle = () => activeProject.title; 
 
-    let getActiveProjectTasks = () => activeProject.tasks;
+    const getActiveProjectTasks = () => activeProject.tasks;
 
-    let getActiveProjectIndex = () => activeProject.projectIndex; 
+    const getActiveProjectIndex = () => activeProject.projectIndex; 
+
+    const removeActiveProject = () => activeProject ="";
+
+
+
 
 
     
@@ -398,6 +403,15 @@ function Controller() {
     console.log(tomorrow);
     const tomorrowFormatted = format(tomorrow, "MM/dd/yyyy");
     console.log(tomorrowFormatted);
+
+
+    ////LOCAL STORAGE
+    function populateStorage() {
+        localStorage.setItem('buttVariable', )
+        
+    }
+
+
     
 
     
@@ -417,6 +431,7 @@ function Controller() {
         getActiveProjectTasks,
         getActiveProjectIndex,
         switchActiveProject,
+        removeActiveProject,
         removeActiveTask,
         addProject,
         switchActiveTask,
@@ -563,12 +578,6 @@ function screenController() {
 
             ////update: use projectIndex to switch between projects
             projectsNavProjectContent.dataset.projectIndex = i;
-
-
-              
-            projectsNavProjectContent.addEventListener('click', openEditProjectForm)
-
-
 
             projectsNavProject.appendChild(projectsNavProjectContent);
 
@@ -794,7 +803,7 @@ function screenController() {
         const addProjectFormUserAdd = document.createElement('button');
         addProjectFormUserAdd.textContent = 'Add';
         addProjectFormUserButtons.appendChild(addProjectFormUserAdd);
-        addProjectFormUserAdd.addEventListener('click', projectFormSubmit);
+        addProjectFormUserAdd.addEventListener('click', submitProjectForm);
 
 
 
@@ -994,11 +1003,14 @@ function screenController() {
     }
 
 
-    function projectFormSubmit() {
+    function submitProjectForm() {
         // const addProjectFormUserTitleInput = document.querySelector('#projectTitle');
         // const projectTitle = addProjectFormUserTitleInput.value;
         
         const projectTitle = document.querySelector('#projectTitle').value;
+
+        ////if toDoList.getActiveProject();...
+        ////same logic as submitTaskForm 
 
 
         
@@ -1030,16 +1042,16 @@ function screenController() {
 
     
 
-    function editTaskFormSubmit() {
-        /*
-        get activeTask
+    // function editTaskFormSubmit() {
+    //     /*
+    //     get activeTask
 
-        1. const taskTitle = document.querySelector('.addTaskFormTitleInput').value;
-        const taskDescription = document.querySelector('.addTaskFormDescriptionInput').value;
-        const taskDueDate = document.querySelector('.addTaskFormDueDateInput').value;
+    //     1. const taskTitle = document.querySelector('.addTaskFormTitleInput').value;
+    //     const taskDescription = document.querySelector('.addTaskFormDescriptionInput').value;
+    //     const taskDueDate = document.querySelector('.addTaskFormDueDateInput').value;
 
-        */
-    }
+    //     */
+    // }
 
 
     function cancelTaskForm() {
@@ -1209,8 +1221,6 @@ function screenController() {
 
     function openEditProjectForm() {
 
-        
-
         // ////open project form 
         openProjectForm();
 
@@ -1271,10 +1281,10 @@ function screenController() {
         projectsNavProjectEdit.appendChild(projectMenu);
         
 
-        projectMenu.addEventListener('click', function() {
-            console.log(`projectMenu being clicked`);
+        // projectMenu.addEventListener('click', function() {
+        //     console.log(`projectMenu being clicked`);
             
-        })
+        // })
 
 
         const projectMenuEdit = document.createElement('div');
@@ -1282,9 +1292,8 @@ function screenController() {
         projectMenuEdit.dataset.projectIndex = projectIndex;
         projectMenu.appendChild(projectMenuEdit);
 
-        projectMenuEdit.addEventListener('click', function() {
-            console.log('projectMenuEdit being clicked');
-        })
+        projectMenuEdit.addEventListener('click', switchActiveProjectClick)
+        projectMenuEdit.addEventListener('click', openEditProjectForm);
 
         const projectEditP = document.createElement('p');
         projectEditP.textContent = 'Edit Project';
