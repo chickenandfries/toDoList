@@ -395,6 +395,9 @@ function Controller() {
         */
         board.deleteProject(projectIndex);
         controllerProjectIndex = controllerProjectIndex-1;
+        
+        console.log(`controllerProjectIndex = ${controllerProjectIndex}`);
+        
 
         console.log(`new global projectIndex in Controller = ${controllerProjectIndex}`);
         
@@ -1004,6 +1007,9 @@ function screenController() {
         const addProjectForm = document.querySelector('#addProjectForm');
         addProjectForm.style.display = 'none';
 
+        turnProjectToggleOff();
+
+
      
     }
 
@@ -1294,6 +1300,10 @@ function screenController() {
 
 
     const projectMenuClick = (e) => {
+        // if (document.querySelector('.projectMenu')) {
+        //     querySelector('.projectMenu').remove();
+        // }
+
         const projectIndex = (e.target.dataset.projectIndex);
         console.log(`this is projectIndex = `);
         console.log(projectIndex);
@@ -1302,8 +1312,9 @@ function screenController() {
         turnProjectToggleOn();
         
 
-        const projectMenu = document.createElement('div')
+        const projectMenu = document.createElement('div');
         projectMenu.classList.add('projectMenu');
+        projectMenu.style.display = 'inline-block';
 
 
 
@@ -1329,8 +1340,7 @@ function screenController() {
         projectMenuEdit.classList.add('projectMenuChildren');
         projectMenuEdit.dataset.projectIndex = projectIndex;
         projectMenu.appendChild(projectMenuEdit);
-
-        projectMenuEdit.addEventListener('click', switchActiveProjectClick)
+        projectMenuEdit.addEventListener('click', switchActiveProjectClick);
         projectMenuEdit.addEventListener('click', openEditProjectForm);
 
         const projectEditP = document.createElement('p');
@@ -1359,10 +1369,24 @@ function screenController() {
         const projectDeleteImg = new Image();
         projectDeleteImg.src = deleteImg;
         projectDeleteImg.classList.add('projectMenuChildrenImg');
-        projectMenuDelete.appendChild(projectDeleteImg);     
+        projectMenuDelete.appendChild(projectDeleteImg); 
+        
+        document.addEventListener('click', e => {
+            const projectMenu = document.querySelector('.projectMenu');
+
+            if (!e.target.closest('.projectMenu')) {
+                alert('lick my ass')
+            }
+
+
+
+        })
                
+    }
 
-
+    const notProjectMenuClick = (e) => {
+        
+        
     }
 
     // document.addEventListener('click', e => {

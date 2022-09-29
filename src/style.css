@@ -132,13 +132,14 @@ header h1 {
 
 .projectMenu {
     position: absolute;
-    display: inline-block;
+    display: none;
     height: 100px;
     width: 150px;
     background-color: #c9c8c7;
     border: 1px solid black;
     top: 25px;
     padding: 0px;
+    z-index: 1;
 }
 
 .projectMenuImg {
@@ -151,9 +152,8 @@ header h1 {
     padding-right: 0.5rem;
     padding-top: 0px;
     padding-bottom: 0px;
-
-
     justify-content: space-between;
+    
   
 }
 
