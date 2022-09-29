@@ -1375,7 +1375,9 @@ function screenController() {
             const projectMenu = document.querySelector('.projectMenu');
 
             if (!e.target.closest('.projectMenu')) {
-                alert('lick my ass')
+                projectMenu.style.display = 'none';
+                console.log();
+                
             }
 
 
