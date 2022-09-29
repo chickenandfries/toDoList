@@ -25,7 +25,6 @@ function Board() {
     board.push(Project('upcoming', 2));
 
 
-
     ////push deleted projects here... 
     let projectTrash =[];   
 
@@ -85,11 +84,11 @@ function Board() {
     }
 
 
-    const editProjectInputs = (projectIndex, projectTitle) => {
+    const editProjectInputs = (projectTitle, projectIndex) => {
         for (let i = 0; i< board.length; i++) {
             if (board[i].projectIndex === projectIndex) {
                 console.log(`found matching project`);
-                board.splice(i,1,Project(projectIndex, projectTitle))
+                board.splice(i,1,Project(projectTitle, projectIndex))
                 return 
             }
         }
@@ -165,6 +164,8 @@ function Board() {
         ////if project's projectIndex is greater than projectIndex of the project that was deleted, subtract one from that projectIndex (pushing new project)
         for (let i = 3; i < board.length; i++) {
             if (board[i].projectIndex > projectIndex) {
+                console.log(board[i].projectIndex);
+                
                 board.splice(i,1,Project(board[i].title, i-1))
             }
         }
@@ -379,8 +380,10 @@ function Controller() {
 
     const editProjectInputs = (projectTitle) => {
         console.log('editProjectInputs now running');
+        console.log(getActiveProjectIndex());
+        
 
-        board.editProjectInputs(getActiveProjectIndex(), projectTitle)
+        board.editProjectInputs(projectTitle, getActiveProjectIndex())
         
     }
 
@@ -1000,7 +1003,23 @@ function screenController() {
 
         const addProjectForm = document.querySelector('#addProjectForm');
         addProjectForm.style.display = 'none';
+
+     
     }
+
+
+    let projectToggle = 'off';
+    function turnProjectToggleOff() {
+        // projectToggle === 'off' ? projectToggle = 'on' : projectToggle = 'off';
+        projectToggle ='off';
+    }
+    function turnProjectToggleOn() {
+        projectToggle ='on';
+    }
+
+
+
+    // let projectToggle
 
 
     function submitProjectForm() {
@@ -1009,14 +1028,30 @@ function screenController() {
         
         const projectTitle = document.querySelector('#projectTitle').value;
 
-        ////if toDoList.getActiveProject();...
-        ////same logic as submitTaskForm 
 
+        /*
+        -when clicking activeprojectmenu, make that switch activeProject 
+        -make editProjectToggle()
+        when submitProjectform
+            if editProjectToggle() on, 
+                editProjectTitle on active Project
+                else if editProjectToggle() not on, 
+                push 
 
-        
+        */
 
-        toDoList.addProject(projectTitle);
+        if (projectToggle === 'off') {
+            toDoList.addProject(projectTitle);
+        }   else if (projectToggle ==='on') {
+            console.log(`projectToggle is on and I'm editing project`);
+            
+            toDoList.editProjectInputs(projectTitle);
+            turnProjectToggleOff();
+        }
+
+   
         updateScreen();        
+
     }
 
         
@@ -1226,6 +1261,7 @@ function screenController() {
 
         ////prefill openProjectForm values with info from activeProject 
         document.querySelector('#projectTitle').value = toDoList.getActiveProjectTitle(); 
+        
             
 
     }
@@ -1261,7 +1297,9 @@ function screenController() {
         const projectIndex = (e.target.dataset.projectIndex);
         console.log(`this is projectIndex = `);
         console.log(projectIndex);
-        
+
+        toDoList.switchActiveProject(projectIndex);
+        turnProjectToggleOn();
         
 
         const projectMenu = document.createElement('div')
