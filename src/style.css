@@ -133,7 +133,7 @@ header h1 {
 .projectMenu {
     position: absolute;
     display: none;
-    height: 100px;
+    height: 125px;
     width: 150px;
     background-color: #c9c8c7;
     border: 1px solid black;
@@ -169,9 +169,15 @@ header h1 {
     align-self: center;
 }
 
+.projectMenuClose {
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 0.5rem;;
+}
 
 
-.projectsContent {
+
+.addProjectButton {
     display: flex;
     border: 2px solid black;
     padding: 0.3rem;
@@ -179,7 +185,7 @@ header h1 {
     margin: 0.5rem;   
 
 }
-.projectsContent > * {
+.addProjectButton > * {
     pointer-events: none;
 }
 

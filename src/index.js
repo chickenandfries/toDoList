@@ -11,6 +11,8 @@ import flagImg from './img/flag.png';
 import menuImg from './img/menu.png';
 import deleteImg from'./img/delete.png';
 import editImg from './img/edit.png';
+import closeImg from './img/close.png';
+
 
 
 
@@ -607,7 +609,7 @@ function screenController() {
         
     
         const addProject = document.createElement('div');
-        addProject.classList.add('projectsContent');
+        addProject.classList.add('addProjectButton');
         projectsNav.appendChild(addProject);
     
         const addProjectImgPNG = new Image();
@@ -1370,23 +1372,49 @@ function screenController() {
         projectDeleteImg.src = deleteImg;
         projectDeleteImg.classList.add('projectMenuChildrenImg');
         projectMenuDelete.appendChild(projectDeleteImg); 
+
         
-        document.addEventListener('click', e => {
-            const projectMenu = document.querySelector('.projectMenu');
+        const projectMenuClose = document.createElement('div');
+        projectMenuClose.classList.add('projectMenuClose');
+        projectMenuClose.dataset.projectIndex = projectIndex;
+        projectMenu.appendChild(projectMenuClose);
+        
 
-            if (!e.target.closest('.projectMenu')) {
-                projectMenu.style.display = 'none';
-                console.log();
-                
-            }
+        
+        // const projectMenuCloseImg = new Image();
+        // projectMenuCloseImg.src = closeImg;
+        // projectMenuClose.appendChild(projectMenuCloseImg);
+
+        const projectMenuCloseButt = document.createElement('button');
+        projectMenuCloseButt.textContent = 'Cancel'
+        projectMenuClose.appendChild(projectMenuCloseButt);
+        projectMenuCloseButt.addEventListener('click', closeProjectMenu);
+
+
+        
+
+
+        
+        // document.addEventListener('click', e => {
+            
+        //     console.log(`closeProjectMenu RUNNING!!!!!!!!`);
+            
+        
+        //     closeProjectMenu()
 
 
 
-        })
+        // })
                
     }
 
-    const notProjectMenuClick = (e) => {
+    const closeProjectMenu = () => {
+        // if (document.querySelector('.projectMenu')) {
+        //     document.querySelector('.projectMenu').style.display = 'none'
+        // }
+        
+        const projectMenu = document.querySelector('.projectMenu');
+        projectMenu.style.display = 'none';
         
         
     }
