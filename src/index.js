@@ -307,13 +307,13 @@ function Controller() {
     const switchActiveProject = (selectedProjectIndex) => {
         console.log(`switchActiveProject is running`);
         
-        for (let i=0; i < boardBoard.length; i++) {
+        for (let i=0; i < board.getBoard().length; i++) {
             if (board.getBoard()[i].projectIndex === selectedProjectIndex) {
                 console.log(`switchActiveProject function - found project`);
                 
                 
        
-                activeProject = boardBoard[i];
+                activeProject = board.getBoard()[i];
                 console.log(activeProject);
                 
             }
@@ -634,7 +634,7 @@ function screenController() {
         activeProjectHeading.classList.add('activeProjectHeading');
 
         
-        activeProjectHeading.textContent = activeProjectTitle;
+        activeProjectHeading.textContent = toDoList.getActiveProjectTitle();
         taskView.appendChild(activeProjectHeading);
 
 
@@ -1057,6 +1057,11 @@ function screenController() {
             turnProjectToggleOff();
         }
 
+        console.log(`this is activeProject`);
+        console.log(`${toDoList.getActiveProjectTitle()}`);
+        
+        
+
    
         updateScreen();        
 
@@ -1310,7 +1315,7 @@ function screenController() {
         console.log(`this is projectIndex = `);
         console.log(projectIndex);
 
-        toDoList.switchActiveProject(projectIndex);
+        toDoList.switchActiveProject(Number(projectIndex));
         turnProjectToggleOn();
         
 
