@@ -195,14 +195,26 @@ function Board() {
 
 
 
-function Project(title, projectIndex) {
+function Project(title, projectIndexInput) {
     let tasks = [];
 
     // const addTaskToProject = projects.push(Task(title, description, duedate, priority, description));
 
+    let projectIndex = projectIndexInput;
+
+    const getProjectIndex = () => projectIndex;
+
+    const editProjectIndex = function(newProjectIndex) {
+        projectIndex = newProjectIndex; 
+
+    }
+
+    
+
     return {
         title: title,
-        projectIndex: projectIndex,
+        getProjectIndex,
+        editProjectIndex,
         tasks,
 
     }
@@ -398,9 +410,6 @@ function Controller() {
         board.deleteProject(projectIndex);
         controllerProjectIndex = controllerProjectIndex-1;
         
-        console.log(`controllerProjectIndex = ${controllerProjectIndex}`);
-        
-
         console.log(`new global projectIndex in Controller = ${controllerProjectIndex}`);
         
 
@@ -1433,6 +1442,8 @@ function screenController() {
  
 
     function deleteProjectClick(e) {
+        console.log(`deleteProjectClick(e) running`);
+        
         
         // let selectedProject;
 
